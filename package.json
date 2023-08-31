@@ -10,6 +10,9 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
-    "nuxt": "^3.7.0"
+    "nuxt": "^3.7.0",
+    "scss": "^0.2.4"
+  },
+  "dependencies": {
   }
 }
