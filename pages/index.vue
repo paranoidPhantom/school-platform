@@ -4,5 +4,5 @@ const { schedule } = useAppConfig()
 </script>
 
 <template>
-    <PrimaryTable :data=""/>
+    <PrimaryTable :data="1"/>
 </template>

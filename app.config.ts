@@ -41,330 +41,340 @@ export default defineAppConfig({
         subjects: {
             "ru_l": {
                 full: "Русский Язык",
-                short: "",
-                icon: ""
+                short: "Рус. Яз.",
+                icon: "game-icons:matryoshka-dolls"
             },
             "kl_chas": {
                 full: "Классный Час",
-                short: "",
-                icon: ""
+                short: "Кл. Час",
+                icon: "healthicons:war-outline"
             },
             "chem": {
                 full: "Химия",
                 short: "Химия",
-                icon: ""
+                icon: "game-icons:spiky-explosion"
             },
             "alg": {
                 full: "Алгебра",
-                short: "",
-                icon: ""
+                short: "Алгебра",
+                icon: "tabler:math"
             },
             "phys": {
                 full: "Физика",
-                short: "",
-                icon: ""
+                short: "Физика",
+                icon: "quill:nuclear"
             },
             "lit": {
                 full: "Литература",
-                short: "",
-                icon: ""
+                short: "Лит-ра",
+                icon: "tabler:book"
             },
             "phys_ed": {
                 full: "Физическая Культура",
-                short: "",
-                icon: ""
+                short: "Физ-ра",
+                icon: "solar:running-round-outline"
             },
             "en_l": {
                 full: "Английский Язык",
-                short: "",
-                icon: ""
+                short: "Англ. Яз.",
+                icon: "icon-park-outline:english"
             },
             "hist": {
                 full: "История",
-                short: "",
-                icon: ""
+                short: "История",
+                icon: "material-symbols:history-toggle-off-rounded"
             },
             "inf": {
                 full: "Информатика",
-                short: "",
-                icon: ""
+                short: "Инф.",
+                icon: "streamline:computer-database-raid-storage-code-disk-programming-database-array-hard-disc"
             },
-            "": {
-                full: "",
-                short: "",
-                icon: ""
+            "obzh": {
+                full: "Основы Безопасности Жизнидеятельности",
+                short: "ОБЖ",
+                icon: "game-icons:deadly-strike"
             },
-            "": {
-                full: "",
-                short: "",
-                icon: ""
+            "geom": {
+                full: "Геометрия",
+                short: "Геом.",
+                icon: "tabler:geometry"
             },
-            "": {
-                full: "",
-                short: "",
-                icon: ""
+            "obsh": {
+                full: "Обществознание",
+                short: "Общество.",
+                icon: "fluent:people-queue-20-regular"
             },
-            "": {
-                full: "",
-                short: "",
-                icon: ""
+            "geo": {
+                full: "География",
+                short: "Георгафия",
+                icon: "bi:geo"
             },
-            "": {
-                full: "",
-                short: "",
-                icon: ""
+            "proj": {
+                full: "Проект наверное",
+                short: "Проект",
+                icon: "mdi:matrix"
             },
-            "": {
-                full: "",
-                short: "",
-                icon: ""
-            },
-            "": {
-                full: "",
-                short: "",
-                icon: ""
+            "bio": {
+                full: "Биология",
+                short: "Биология",
+                icon: "fa6-solid:biohazard"
             },
             
         },
         teachers: {
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            "": "",
-            
+            "ev": "Арачеева Элина Витальевна",
+            "nn": "Веретникова Наталья Николаевна",
+            "rk": "Сухова Рушания Камильевна",
+            "p_oa": "Прокопченко Ольга Алексеевна",
+            "i_oa": "Тузова Ольга Алексеевна",
+            "av": "Перов А. В.",
+            "ia": "Соколов Игорь Александрович",
+            "ei": "Утёмова Елена Игоревна",
+            "pn": "Жарикова Полина Николаевна",
+            "ni": "Сапрыгин Николай Иванович",
+            "eb": "Зеленская Елена Борисовна",
+            "to": "Прохоренко Т. О.",
+            "ng": "Оробинская Наталья Георгевна",
         },
         locations: {
-            "": {
-                short: "",
-                floor: 1,
+            "ru": {
+                short: "Рус. 3",
+                floor: 5,
             },
-            "": {
-                short: "",
-                floor: 1,
+            "chem": {
+                short: "Химия",
+                floor: 4,
             },
-            "": {
-                short: "",
-                floor: 1,
+            "math": {
+                short: "Мат. 4",
+                floor: 2,
             },
-            "": {
-                short: "",
-                floor: 1,
+            "phys": {
+                short: "Физика",
+                floor: 4,
             },
-            "": {
-                short: "",
-                floor: 1,
+            "sport": {
+                short: "Спорт. Зал",
+                floor: 5,
             },
-            "": {
-                short: "",
-                floor: 1,
+            "en_1": {
+                short: "Англ. 5",
+                floor: 4,
             },
-            "": {
-                short: "",
-                floor: 1,
+            "en_2": {
+                short: "Англ. 7",
+                floor: 4,
             },
-            "": {
-                short: "",
-                floor: 1,
+            "hist": {
+                short: "Ист. 2",
+                floor: 2,
+            },
+            "inf": {
+                short: "Инф. 1",
+                floor: 2,
+            },
+            "geo": {
+                short: "Геогр.",
+                floor: 3,
+            },
+            "ort": {
+                short: "ОРТ 1",
+                floor: 3,
+            },
+            "bio": {
+                short: "Биол.",
+                floor: 4,
             },
         },
         lessons: [
             [
                 // 1
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "kl_chas",
+                    teacher: "ev",
+                    location: "ru"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "chem",
+                    teacher: "nn",
+                    location: "chem"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "alg",
+                    teacher: "rk",
+                    location: "math"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "phys",
+                    teacher: "p_oa",
+                    location: "phys"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "lit",
+                    teacher: "ev",
+                    location: "ru"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "phys_ed",
+                    teacher: "av",
+                    location: "sport"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "en_l",
+                    teacher: ["ia", "ei"],
+                    location: ["en_2", "en_1"]
                 },
             ],
             [
                 // 2
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "lit",
+                    teacher: "ev",
+                    location: "ru"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "hist",
+                    teacher: "pn",
+                    location: "hist"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "inf",
+                    teacher: ["sv", "i_oa"],
+                    location: ["geo", "inf"]
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "inf",
+                    teacher: ["sv", "i_oa"],
+                    location: ["geo", "inf"]
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "alg",
+                    teacher: "rk",
+                    location: "math"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "en_l",
+                    teacher: ["ia", "ei"],
+                    location: ["en_2", "en_1"]
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "hist",
+                    teacher: "pn",
+                    location: "hist"
                 },
             ],
             [
                 // 3
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "obzh",
+                    teacher: "ni",
+                    location: "chem"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "geom",
+                    teacher: "rk",
+                    location: "math"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "hist",
+                    teacher: "pn",
+                    location: "hist"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "obsh",
+                    teacher: "pn",
+                    location: "hist"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "ru_l",
+                    teacher: "ev",
+                    location: "ru"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "en_l",
+                    teacher: ["ia", "ei"],
+                    location: ["en_2", "en_1"]
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "en_l",
+                    teacher: ["ia", "ei"],
+                    location: ["en_2", "en_1"]
                 },
             ],
             [
                 // 4
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "geom",
+                    teacher: "rk",
+                    location: "math"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "inf",
+                    teacher: ["sv", "i_oa"],
+                    location: ["ort", "inf"]
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "inf",
+                    teacher: ["sv", "i_oa"],
+                    location: ["ort", "inf"]
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "geo",
+                    teacher: "eb",
+                    location: "geo"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "en_l",
+                    teacher: ["ia", "ei"],
+                    location: ["en_2", "en_1"]
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "phys",
+                    teacher: "p_oa",
+                    location: "phys"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "proj",
+                    teacher: "to",
+                    location: "inf"
                 },
             ],
             [
                 // 5
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "ru_l",
+                    teacher: "ev",
+                    location: "ru"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "lit",
+                    teacher: "ev",
+                    location: "ru"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "alg",
+                    teacher: "rk",
+                    location: "math"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "alg",
+                    teacher: "rk",
+                    location: "math"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "phys_ed",
+                    teacher: "av",
+                    location: "sport"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "obsh",
+                    teacher: "pn",
+                    location: "hist"
                 },
                 {
-                    subject: "",
-                    teacher: "",
-                    location: ""
+                    subject: "bio",
+                    teacher: "ng",
+                    location: "bio"
                 },
             ],
         ],
