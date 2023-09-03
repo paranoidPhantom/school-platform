@@ -69,7 +69,8 @@ const handleOnMouseMove = (e: any) => {
 }
 
 const handleOnMouseMoveGlobal = (e: any) => {
-    for (const card of document.querySelectorAll(".card")) {
+    const cards = document.querySelectorAll<HTMLElement>(".card")
+    for (const card of cards) {
         const rect = card.getBoundingClientRect(),
             x = e.clientX - rect.left,
             y = e.clientY - rect.top;
