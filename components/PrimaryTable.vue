@@ -131,18 +131,32 @@ const currentLessonArray = computed(() => {
 </script>
 
 <template>
-    <UModal v-model="modal.open">
-        <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-            <template #header>
-                <h1 class="icon-container"><Icon :name="modal.subject.icon"/>{{ modal.subject.full }}</h1>
-            </template>
-            <ul style="padding: initial; margin: initial; margin-left: 1rem;">
-                <li class="icon-container"><Icon name="line-md:account"/>{{ modal.teacher }}</li>
-                <li class="icon-container"><Icon name="line-md:external-link-rounded"/>{{ modal.location.short }} ({{ modal.location.floor }} этаж)</li>
-            </ul>
-        </UCard>
-    </UModal>
     <section class="container">
+        <ClientOnly>
+            <TransitionGroup name="modal">
+                <div class="modal" v-if="modal.open" v-for="lesson in currentLessonArray" :key="(JSON.stringify(lesson))">
+                    <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                        <template #header>
+                            <span class="header">
+                                <Icon :name="subjectData(lesson.subject).icon" />{{ subjectData(lesson.subject).full }}
+                                <button class="close" @click="modal.open = false">
+                                    <Icon name="material-symbols:close" />
+                                </button>
+                            </span>
+                        </template>
+                        <ul>
+                            <li>
+                                <Icon name="ph:chalkboard-teacher" />
+
+                            </li>
+                            <li>
+                                <Icon name="material-symbols:location-on-outline-rounded" />
+                            </li>
+                        </ul>
+                    </UCard>
+                </div>
+            </TransitionGroup>
+        </ClientOnly>
         <div class="index">
             <div class="card" style="opacity: 0;">
                 <span>#</span>
