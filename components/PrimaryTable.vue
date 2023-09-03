@@ -121,6 +121,13 @@ onUnmounted(() => {
     if (timeCheck) { clearInterval(timeCheck) }
 })
 
+const subjectData = (subject: keyof typeof schedule.subjects): subject => {
+    return schedule.subjects[subject]
+}
+
+const currentLessonArray = computed(() => {
+    return [modal.lesson]
+})
 </script>
 
 <template>
