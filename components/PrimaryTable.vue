@@ -459,12 +459,9 @@ const locationString = (location: location) => {
     .container {
         width: 100%;
         margin: 1rem 0;
-        span {
-            font-size: 0.5rem;
-        }
     }
-    .card span {
-        font-size: 0.7rem;
+    .card > span {
+        font-size: 0.6rem;
     }
 }
 

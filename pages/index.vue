@@ -4,6 +4,7 @@
 </script>
 
 <template>
+    <h1 class="info">Расписание уроков блин (10Б, 23-24)</h1>
     <PrimaryTable />
     <div class="mobile-indicator">
         <Icon class="icon" name="material-symbols:screen-rotation-outline"/>
@@ -12,6 +13,12 @@
 </template>
 
 <style scoped lang="scss">
+.info {
+    text-align: center;
+    width: 100%;
+    margin: 1rem 0;
+}
+
 @keyframes spin {
     0% {
         rotate: 0deg;
