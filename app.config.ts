@@ -84,82 +84,82 @@ export default defineAppConfig({
             },
         ],
         subjects: {
-            ru_l: {
+            "ru_l": {
                 full: "Русский Язык",
                 short: "Рус. Яз.",
                 icon: "game-icons:matryoshka-dolls",
             },
-            kl_chas: {
+            "kl_chas": {
                 full: "Классный Час",
                 short: "Кл. Час",
                 icon: "healthicons:war-outline",
             },
-            chem: {
+            "chem": {
                 full: "Химия",
                 short: "Химия",
                 icon: "game-icons:spiky-explosion",
             },
-            alg: {
+            "alg": {
                 full: "Алгебра",
                 short: "Алгебра",
                 icon: "tabler:math",
             },
-            phys: {
+            "phys": {
                 full: "Физика",
                 short: "Физика",
                 icon: "quill:nuclear",
             },
-            lit: {
+            "lit": {
                 full: "Литература",
                 short: "Лит-ра",
                 icon: "tabler:book",
             },
-            phys_ed: {
+            "phys_ed": {
                 full: "Физическая Культура",
                 short: "Физ-ра",
                 icon: "solar:running-round-outline",
             },
-            en_l: {
+            "en_l": {
                 full: "Английский Язык",
                 short: "Англ. Яз.",
                 icon: "icon-park-outline:english",
             },
-            hist: {
+            "hist": {
                 full: "История",
                 short: "История",
                 icon: "material-symbols:history-toggle-off-rounded",
             },
-            inf: {
+            "inf": {
                 full: "Информатика",
                 short: "Инф.",
                 icon: "streamline:computer-database-raid-storage-code-disk-programming-database-array-hard-disc",
             },
-            obzh: {
+            "obzh": {
                 full: "Основы Безопасности Жизнидеятельности",
                 short: "ОБЖ",
                 icon: "game-icons:deadly-strike",
             },
-            geom: {
+            "geom": {
                 full: "Геометрия",
                 short: "Геом.",
                 icon: "tabler:geometry",
             },
-            obsh: {
+            "obsh": {
                 full: "Обществознание",
                 short: "Общество.",
                 icon: "fluent:people-queue-20-regular",
             },
-            geo: {
+            "geo": {
                 full: "География",
                 short: "Георгафия",
                 icon: "bi:geo",
             },
-            proj: {
+            "proj": {
                 full: "Проект наверное",
                 short: "Проект",
                 icon: "mdi:matrix",
             },
-            bio: {
+            "bio": {
                 full: "Биология",
                 short: "Биология",
                 icon: "fa6-solid:biohazard",
