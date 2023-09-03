@@ -385,4 +385,14 @@ const currentLessonArray = computed(() => {
 
 .modal-enter-from,
 .modal-leave-to {
+    opacity: 0;
+    transform-origin: 50% 50%;
+    transform: scale(0.7);
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0);
+}
+
+.modal-enter-active,
+.modal-leave-active {
+    transition: all 0.3s;
+}
 </style>
