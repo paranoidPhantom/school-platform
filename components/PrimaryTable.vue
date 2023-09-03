@@ -197,10 +197,50 @@ const currentLessonArray = computed(() => {
 </template>
 
 <style lang="scss">
-.icon-container {
-    > svg {
+.modal {
+    position: fixed;
+    z-index: 102;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    box-shadow: 0 0 1rem 100vw rgba(0, 0, 0, 0.5);
+    border-radius: 3rem;
+    width: 45%;
+
+    .close {
+        display: flex;
+        align-items: center;
+        background-color: transparent;
+        padding: 0.25rem;
+        transition: all 0.3s;
+        border-radius: 0.5rem;
+        margin-left: auto;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    }
+
+    span {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        &.header {
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    ul {
+        padding: initial;
+        margin: initial;
+        margin-left: 1rem;
+    }
+
+    svg {
         height: 100%;
-        margin-right: 0.5rem;
         transform: scale(1.1);
     }
 }
@@ -208,6 +248,10 @@ const currentLessonArray = computed(() => {
 .container {
     --index-width: 2rem;
     --gap-size: 0.5rem;
+
+    --color: 0, 255, 179;
+    --warning-color: 0, 0, 0;
+    --red-color: 255, 0, 0;
     // Positioning and sizing of main container
     margin: 1rem 5%;
     width: 90%;
@@ -216,14 +260,14 @@ const currentLessonArray = computed(() => {
     justify-content: center;
 
     .index {
-        width: var(--index-width);
+        width: var(--index-width) !important;
     }
 
     >.time {
         width: calc((100% - var(--index-width)) / 6.5);
     }
 
-    >div {
+    >div:not(.modal) {
         padding: calc(var(--gap-size) / 2);
         display: flex;
         flex-direction: column;
@@ -232,7 +276,7 @@ const currentLessonArray = computed(() => {
         gap: var(--gap-size);
 
         &.current {
-            filter: drop-shadow(0 0.1rem 0.3rem rgba(0, 255, 179, 0.3));
+            filter: drop-shadow(0 0.1rem 0.3rem rgba(var(--color), 0.3));
         }
 
         .card {
@@ -248,7 +292,7 @@ const currentLessonArray = computed(() => {
 
             &::before {
                 background-image: radial-gradient(250px circle at var(--mouse-x) var(--mouse-y),
-                        rgba(0, 255, 179, 0.5),
+                        rgba(var(--color), 0.5),
                         transparent 40%);
                 content: "";
                 border-radius: inherit;
@@ -262,6 +306,7 @@ const currentLessonArray = computed(() => {
 
             &.current {
                 overflow: hidden;
+                --color: 0, 255, 179;
             }
 
             @keyframes rotate {
@@ -276,7 +321,7 @@ const currentLessonArray = computed(() => {
 
             &.current::before {
                 animation: rotate 4s infinite linear;
-                background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), rgba(0, 255, 179, 0.8));
+                background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), rgba(var(--color), 0.8));
                 width: 100vw;
                 height: 100vw;
                 top: 50%;
@@ -285,7 +330,7 @@ const currentLessonArray = computed(() => {
             }
 
             &.current.idle::before {
-                background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), rgba(255, 0, 0, 0.8));
+                background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), rgba(var(--red-color), 0.8));
             }
 
             span {
@@ -294,7 +339,7 @@ const currentLessonArray = computed(() => {
                 gap: 1rem;
                 border-radius: inherit;
                 padding: 0.5rem;
-                background-color: rgb(5, 5, 5);
+                background-color: rgba(5, 5, 5, 0.92);
 
                 width: calc(100% - 2px);
                 height: calc(100% - 2px);
@@ -317,7 +362,7 @@ const currentLessonArray = computed(() => {
                 &::before {
                     transition: all 0.6s;
                     background: radial-gradient(200px circle at var(--mouse-x) var(--mouse-y),
-                            rgba(0, 255, 179, 0.2),
+                            rgba(var(--color), 0.2),
                             transparent 40%);
                     opacity: 0;
                     content: "";
@@ -337,4 +382,7 @@ const currentLessonArray = computed(() => {
         }
     }
 }
+
+.modal-enter-from,
+.modal-leave-to {
 </style>
