@@ -7,15 +7,13 @@ interface subject {
     icon: string;
 }
 
-interface location {
-    short: string;
-    floor: number;
-}
+type teacher = keyof typeof schedule.teachers | (keyof typeof schedule.teachers)[];
+type location = keyof typeof schedule.locations | (keyof typeof schedule.locations)[];
 
 interface lesson {
     subject: keyof typeof schedule.subjects;
-    teacher: keyof typeof schedule.teachers | (keyof typeof schedule.teachers)[];
-    location: keyof typeof schedule.locations | (keyof typeof schedule.locations)[];
+    teacher: teacher;
+    location: location;
 }
 
 const modal: {
@@ -44,9 +42,8 @@ function isTimeBetween(target: string | Date, start: string, end: string): boole
     if (typeof target === 'string') {
         target = new Date(`1970-01-02T${target}`);
     } else {
-        target = new Date(`1970-01-02T${target.getHours()}:${target.getMinutes()}`)
+        target = new Date(`1970-01-02T${target.getHours().toString().length < 2 ? '0' : ''}${target.getHours()}:${target.getMinutes().toString().length < 2 ? '0' : ''}${target.getMinutes()}`)
     }
-
     startTime = new Date(`1970-01-02T${start}`);
     endTime = new Date(`1970-01-02T${end}`);
 
@@ -128,6 +125,41 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
 const currentLessonArray = computed(() => {
     return [modal.lesson]
 })
+
+const modal_tabs = [{
+    label: 'Информация',
+    icon: 'material-symbols:info-outline',
+    key: 'info'
+}, {
+    label: 'Домашнее задание',
+    icon: 'material-symbols:menu-book-outline-rounded',
+    key: 'hw'
+}]
+
+
+const teacherString = (teacher: teacher) => {
+    let output = ""
+    if (Array.isArray(teacher)) {
+        teacher.forEach((value, index) => {
+            output = `${output}${index === 0 ? '' : ' | '}${schedule.teachers[value]}`
+        })
+    } else {
+        output = schedule.teachers[teacher]
+    }
+    return output
+}
+
+const locationString = (location: location) => {
+    let output = ""
+    if (Array.isArray(location)) {
+        location.forEach((value, index) => {
+            output = `${output}${index === 0 ? '' : ' | '}${schedule.locations[value].short} (${schedule.locations[value].floor} этаж)`
+        })
+    } else {
+        output = `${schedule.locations[location].short} (${schedule.locations[location].floor} этаж)`
+    }
+    return output
+}
 </script>
 
 <template>
@@ -135,25 +167,46 @@ const currentLessonArray = computed(() => {
         <ClientOnly>
             <TransitionGroup name="modal">
                 <div class="modal" v-if="modal.open" v-for="lesson in currentLessonArray" :key="(JSON.stringify(lesson))">
-                    <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-                        <template #header>
-                            <span class="header">
-                                <Icon :name="subjectData(lesson.subject).icon" />{{ subjectData(lesson.subject).full }}
-                                <button class="close" @click="modal.open = false">
-                                    <Icon name="material-symbols:close" />
-                                </button>
-                            </span>
+                    <UTabs :items="modal_tabs" class="w-full">
+                        <template #default="{ item, index, selected }">
+                            <div class="flex items-center gap-2 relative truncate">
+                                <Icon :name="item.icon" class="w-4 h-4 flex-shrink-0" />
+                                <span class="truncate">{{ item.label }}</span>
+                                <span v-if="selected"
+                                    class="absolute -right-4 w-2 h-2 rounded-full bg-primary-500 dark:bg-primary-400" />
+                            </div>
                         </template>
-                        <ul>
-                            <li>
-                                <Icon name="ph:chalkboard-teacher" />
-
-                            </li>
-                            <li>
-                                <Icon name="material-symbols:location-on-outline-rounded" />
-                            </li>
-                        </ul>
-                    </UCard>
+                        <template #item="{ item }">
+                            <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                                <template #header>
+                                    <span class="header">
+                                        <Icon :name="subjectData(lesson.subject).icon" />{{ subjectData(lesson.subject).full
+                                        }}
+                                        <button class="close" @click="modal.open = false">
+                                            <Icon name="material-symbols:close" />
+                                        </button>
+                                    </span>
+                                </template>
+                                <!-- Info -->
+                                <div class="info" v-if="item.key === 'info'">
+                                    <ul>
+                                        <li>
+                                            <Icon name="ph:chalkboard-teacher" />
+                                            {{ teacherString(modal.lesson.teacher) }}
+                                        </li>
+                                        <li>
+                                            <Icon name="material-symbols:location-on-outline-rounded" />
+                                            {{ locationString(modal.lesson.location) }}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- Homework -->
+                                <div class="hw" v-else>
+                                    <span>Раздел в разработке</span>
+                                </div>
+                            </UCard>
+                        </template>
+                    </UTabs>
                 </div>
             </TransitionGroup>
         </ClientOnly>
@@ -259,6 +312,8 @@ const currentLessonArray = computed(() => {
     display: flex;
     justify-content: center;
 
+    transition: all 0.3s;
+
     .index {
         width: var(--index-width) !important;
     }
@@ -275,7 +330,7 @@ const currentLessonArray = computed(() => {
         min-width: fit-content;
         gap: var(--gap-size);
 
-        &.current {
+        &.current .card {
             filter: drop-shadow(0 0.1rem 0.3rem rgba(var(--color), 0.3));
         }
 
@@ -329,8 +384,12 @@ const currentLessonArray = computed(() => {
                 translate: -50% -50%;
             }
 
+            &.current.idle {
+                --color: 255, 0, 0;
+            }
+
             &.current.idle::before {
-                background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), rgba(var(--red-color), 0.8));
+                background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), rgba(var(--color), 0.8));
             }
 
             span {
@@ -394,5 +453,21 @@ const currentLessonArray = computed(() => {
 .modal-enter-active,
 .modal-leave-active {
     transition: all 0.3s;
+}
+
+@media (max-width: 1100px) {
+    .container {
+        width: 100%;
+        margin: 1rem 0;
+    }
+    .card span {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 800px) {
+    .container {
+        display: none;
+    }
 }
 </style>
