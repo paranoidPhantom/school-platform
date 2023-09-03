@@ -182,14 +182,14 @@ const currentLessonArray = computed(() => {
                 <span>{{ day }}</span>
                 <span class="dummy">{{ day }}</span>
             </div>
-            <div class="card" v-for="(lesson, lessonIndex) in schedule.lessons[index]"
-                @click="modal.subject = schedule.subjects[lesson.subject]; modal.location = schedule.locations[lesson.location]; modal.teacher = schedule.teachers[lesson.teacher]; modal.open = true"
+            <div class="card" v-for="(lesson, lessonIndex) in (schedule.lessons[index] as lesson[])"
+                @click="modal.lesson = lesson as typeof modal.lesson; modal.open = true"
                 :class="{ current: index === currentTime.day - 1 && (lessonIndex + 1 === currentTime.lessonIndex / 2 || lessonIndex * 2 === currentTime.lessonIndex + 1), idle: lessonIndex * 2 === currentTime.lessonIndex + 1 }">
                 <span>
-                    <Icon :name="schedule.subjects[lesson.subject].icon" /> {{ schedule.subjects[lesson.subject].short }}
+                    <Icon :name="subjectData(lesson.subject).icon" /> {{ subjectData(lesson.subject).short }}
                 </span>
                 <span class="dummy">
-                    <Icon :name="schedule.subjects[lesson.subject].icon" /> {{ schedule.subjects[lesson.subject].short }}
+                    <Icon :name="subjectData(lesson.subject).icon" /> {{ subjectData(lesson.subject).short }}
                 </span>
             </div>
         </div>
