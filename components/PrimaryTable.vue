@@ -1,11 +1,33 @@
 <script setup lang="ts">
 const { schedule } = useAppConfig()
 
-const modal = reactive({
+interface subject {
+    full: string;
+    short: string;
+    icon: string;
+}
+
+interface location {
+    short: string;
+    floor: number;
+}
+
+interface lesson {
+    subject: keyof typeof schedule.subjects;
+    teacher: keyof typeof schedule.teachers | (keyof typeof schedule.teachers)[];
+    location: keyof typeof schedule.locations | (keyof typeof schedule.locations)[];
+}
+
+const modal: {
+    open: boolean,
+    lesson: lesson
+} = reactive({
     open: false,
-    subject: {},
-    teacher: "",
-    location: {}
+    lesson: {
+        subject: "ru_l",
+        teacher: "ev",
+        location: "ru"
+    }
 })
 const currentTime = reactive({
     day: 0,
