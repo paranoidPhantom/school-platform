@@ -7,6 +7,7 @@
     <PrimaryTable />
     <div class="mobile-indicator">
         <Icon class="icon" name="material-symbols:screen-rotation-outline"/>
+        <span>Экран блин поверни</span>
     </div>
 </template>
 
@@ -30,15 +31,17 @@
     opacity: 0;
     transition: all 0.3s;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    gap: 1rem;
     .icon {
         font-size: 3rem;
         animation: spin 1s infinite;
     }
 }
-@media (max-width: 800px) {
+@media (max-width: 600px) {
     .mobile-indicator {
         opacity: 1;
     }

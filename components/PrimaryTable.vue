@@ -459,13 +459,16 @@ const locationString = (location: location) => {
     .container {
         width: 100%;
         margin: 1rem 0;
+        span {
+            font-size: 0.5rem;
+        }
     }
     .card span {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 600px) {
     .container {
         display: none;
     }
