@@ -1,10 +1,11 @@
 <script setup lang="ts">
-
+const title = "Расписание уроков блин (10Б, 23-24)"
 
 </script>
 
 <template>
-    <h1 class="info">Расписание уроков блин (10Б, 23-24)</h1>
+    <title>{{ title }}</title>
+    <h1 class="info">{{ title }}</h1>
     <PrimaryTable />
     <div class="mobile-indicator">
         <Icon class="icon" name="material-symbols:screen-rotation-outline"/>
