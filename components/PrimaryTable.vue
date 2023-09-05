@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { schedule } = useAppConfig()
+const { schedule, homework } = useAppConfig()
 
 interface subject {
     full: string;
@@ -16,6 +16,8 @@ interface lesson {
     location: location;
 }
 
+const current_hover_subject = ref("")
+
 const modal: {
     open: boolean,
     lesson: lesson
@@ -27,6 +29,7 @@ const modal: {
         location: "ru"
     }
 })
+
 const currentTime = reactive({
     day: 0,
     lessonIndex: 0
@@ -127,13 +130,13 @@ const currentLessonArray = computed(() => {
 })
 
 const modal_tabs = [{
-    label: 'Информация',
-    icon: 'material-symbols:info-outline',
-    key: 'info'
-}, {
     label: 'Домашнее задание',
     icon: 'material-symbols:menu-book-outline-rounded',
     key: 'hw'
+},{
+    label: 'Информация',
+    icon: 'material-symbols:info-outline',
+    key: 'info'
 }]
 
 
@@ -159,6 +162,28 @@ const locationString = (location: location) => {
         output = `${schedule.locations[location].short} (${schedule.locations[location].floor} этаж)`
     }
     return output
+}
+
+const hasHomework = (index: number, lesson: keyof typeof schedule.subjects) => {
+    const Now = new Date()
+    const diff = index >= currentTime.day ? index - currentTime.day : 7 - currentTime.day + index
+    Now.setDate(Now.getDate() + diff)
+    const matchString = `${Now.getDate()}/${Now.getMonth() + 1}/${Now.getFullYear()}`
+    for (let i: number = 0; i < homework[lesson]?.length; i++) {
+        const instance = homework[lesson][i]
+        if (instance.date_due === matchString) {
+            return true
+        }
+    }
+    return false
+}
+
+const normalizeDate = (date: string | undefined) => {
+    if (!date) { return date }
+    const split = date.split("/")
+    const d = split[0]
+    const m = split[1]
+    return `${d.length < 2 ? '0' + d : d}.${m.length < 2 ? '0' + m : m}`
 }
 </script>
 
@@ -202,7 +227,23 @@ const locationString = (location: location) => {
                                 </div>
                                 <!-- Homework -->
                                 <div class="hw" v-else>
-                                    <span>Раздел в разработке</span>
+                                    <div class="empty" v-if="homework[lesson.subject]?.length === 0">
+                                        <img
+                                            src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c9a27e0a-52f7-4cec-a932-b6246308a58e/dfnukjz-0f4dc473-62cc-473c-8ee8-e1a01f5787f6.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2M5YTI3ZTBhLTUyZjctNGNlYy1hOTMyLWI2MjQ2MzA4YTU4ZVwvZGZudWtqei0wZjRkYzQ3My02MmNjLTQ3M2MtOGVlOC1lMWEwMWY1Nzg3ZjYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.LAy1v69f0jD8PocZATncuHCTwKz2SZvzoNOYEK3mUwY">
+                                        <p>А нету ничо пока<br>Ну вообще збс так-то</p>
+                                    </div>
+                                    <div class="instance" v-for="instance in homework[lesson.subject]">
+                                        <p class="primary" v-html="instance.text"></p>
+                                        <div class="attachments" v-if="instance.attachments?.length || 0 > 0">
+                                            <ContentSlideshow :content="instance.attachments"
+                                                prefix="/media/attachments/" />
+                                        </div>
+                                        <div class="dates">
+                                            <p class="date">{{ instance.date ? `Задано:`: `` }} {{ normalizeDate(instance.date) }}
+                                            </p>
+                                            <p class="due-date">Нужно сдать: {{ normalizeDate(instance.date_due) }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </UCard>
                         </template>
@@ -237,13 +278,16 @@ const locationString = (location: location) => {
             </div>
             <div class="card" v-for="(lesson, lessonIndex) in (schedule.lessons[index] as lesson[])"
                 @click="modal.lesson = lesson as typeof modal.lesson; modal.open = true"
-                :class="{ current: index === currentTime.day - 1 && (lessonIndex + 1 === currentTime.lessonIndex / 2 || lessonIndex * 2 === currentTime.lessonIndex + 1), idle: lessonIndex * 2 === currentTime.lessonIndex + 1 }">
+                @mouseenter="current_hover_subject = lesson.subject"
+                @mouseleave="current_hover_subject = ''"
+                :class="{ highlight: current_hover_subject === lesson.subject, current: index === currentTime.day - 1 && (lessonIndex + 1 === currentTime.lessonIndex / 2 || lessonIndex * 2 === currentTime.lessonIndex + 1), idle: lessonIndex * 2 === currentTime.lessonIndex + 1 }">
                 <span>
                     <Icon :name="subjectData(lesson.subject).icon" /> {{ subjectData(lesson.subject).short }}
                 </span>
                 <span class="dummy">
                     <Icon :name="subjectData(lesson.subject).icon" /> {{ subjectData(lesson.subject).short }}
                 </span>
+                <div class="status" :class="{ hashw: hasHomework(index + 1, lesson.subject) }"></div>
             </div>
         </div>
     </section>
@@ -258,7 +302,7 @@ const locationString = (location: location) => {
     translate: -50% -50%;
     box-shadow: 0 0 1rem 100vw rgba(0, 0, 0, 0.5);
     border-radius: 3rem;
-    width: 45%;
+    width: 65%;
 
     .close {
         display: flex;
@@ -296,15 +340,79 @@ const locationString = (location: location) => {
         height: 100%;
         transform: scale(1.1);
     }
+
+    .hw {
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        max-height: calc(80vh - 10rem);
+        overflow-y: auto;
+
+        .empty {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
+
+            >img {
+                width: 20%;
+            }
+
+            p {
+                text-align: center;
+            }
+        }
+
+        .instance {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            outline: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 1rem;
+            margin: 1rem 2px;
+
+            .primary {
+                li {
+                    list-style: initial;
+                }
+            }
+
+            .dates {
+                display: flex;
+                justify-content: space-between;
+
+                p {
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
 }
 
 .container {
+
+    span.icon {
+        display: none;
+    }
+
     --index-width: 2rem;
     --gap-size: 0.5rem;
 
-    --color: 0, 255, 179;
-    --warning-color: 0, 0, 0;
-    --red-color: 255, 0, 0;
+    --color: 0,
+    255,
+    179;
+    --warning-color: 0,
+    0,
+    0;
+    --blue-color: 0,
+    102,
+    255;
+    --red-color: 255,
+    0,
+    0;
     // Positioning and sizing of main container
     margin: 1rem 5%;
     width: 90%;
@@ -344,6 +452,25 @@ const locationString = (location: location) => {
             padding: 1px;
             display: flex;
             justify-content: center;
+            &.highlight:not(:hover) {
+                outline: 1px solid rgba(0, 255, 179, 0.5);
+            }
+
+            .status {
+                position: absolute;
+                z-index: 1000;
+                right: 0.25rem;
+                bottom: 0.25rem;
+                width: 0.5rem;
+                height: 0.5rem;
+                outline: 2px solid rgba(255, 255, 255, 0.2);
+                background-color: grey;
+                border-radius: 1rem;
+                opacity: 0.5;
+                &.hashw {
+                    background-color: orange;
+                }
+            }
 
             &::before {
                 background-image: radial-gradient(250px circle at var(--mouse-x) var(--mouse-y),
@@ -361,7 +488,7 @@ const locationString = (location: location) => {
 
             &.current {
                 overflow: hidden;
-                --color: 0, 255, 179;
+                --color: 0, 102, 255;
             }
 
             @keyframes rotate {
@@ -460,7 +587,8 @@ const locationString = (location: location) => {
         width: 100%;
         margin: 1rem 0;
     }
-    .card > span {
+
+    .card>span {
         font-size: 0.6rem;
     }
 }
@@ -469,5 +597,4 @@ const locationString = (location: location) => {
     .container {
         display: none;
     }
-}
-</style>
+}</style>
