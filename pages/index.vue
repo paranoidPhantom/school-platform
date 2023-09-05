@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const title = "Расписание уроков блин (10Б, 23-24)"
+const title = "Расписание уроков блин (10Б, 2023-24)"
 
 </script>
 
