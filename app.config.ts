@@ -39,11 +39,43 @@ declare module "nuxt/schema" {
     }
 }
 
+interface homework_instance {
+    text: string; // Задание
+    attachments?: string[] /* Массив ссылок на закрепы.
+    Пример:
+    Если файл находятся по путю: '/public/media/attachemnts/math/09-05-2023.png',
+    то нужно добавить в массив значение 'math/09-05-2023.png'
+    */;
+    date?: string; // Формат: ДД/ММ/ГГГГ
+    date_due: string; // Формат: ДД/ММ/ГГГГ (ВАЖНО: НЕ 09.05.2023, А 9.5.2023)
+}
+
+interface homework_array {
+    terver?: homework_instance[];
+    ru_l?: homework_instance[];
+    kl_chas?: homework_instance[];
+    chem?: homework_instance[];
+    alg?: homework_instance[];
+    phys?: homework_instance[];
+    lit?: homework_instance[];
+    phys_ed: homework_instance[];
+    en_l?: homework_instance[];
+    hist?: homework_instance[];
+    inf?: homework_instance[];
+    obzh?: homework_instance[];
+    geom?: homework_instance[];
+    obsh?: homework_instance[];
+    geo?: homework_instance[];
+    proj?: homework_instance[];
+    bio?: homework_instance[];
+}
+
 export default defineAppConfig({
     ui: {
         primary: "green",
         gray: "neutral",
     },
+    homework: homework,
     schedule: {
         days: ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"],
         times: [
