@@ -166,6 +166,11 @@ export default defineAppConfig({
         ],
         subjects: {
             "ru_l": {
+            terver: {
+                full: "Теория вероятностей",
+                short: "Тер. Вер.",
+                icon: "mdi:slot-machine-outline",
+            },
                 full: "Русский Язык",
                 short: "Рус. Яз.",
                 icon: "game-icons:matryoshka-dolls",
