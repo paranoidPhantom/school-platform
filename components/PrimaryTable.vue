@@ -234,7 +234,7 @@ const normalizeDate = (date: string | undefined) => {
                                     </div>
                                     <div class="instance" v-for="instance in homework[lesson.subject]">
                                         <p class="primary" v-html="instance.text"></p>
-                                        <div class="attachments" v-if="instance.attachments?.length || 0 > 0">
+                                        <div class="attachments" v-if="instance.attachments?.length > 0">
                                             <ContentSlideshow :content="instance.attachments"
                                                 prefix="/media/attachments/" />
                                         </div>
