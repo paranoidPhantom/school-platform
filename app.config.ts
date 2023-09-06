@@ -1,3 +1,4 @@
+import homework_db from "./hw.json" assert { type: "json" };
 interface time {
     start: string;
     end: string;
@@ -70,7 +71,7 @@ interface homework_array {
     bio?: homework_instance[];
 }
 
-const homework: homework_array = {
+const homework: homework_array = homework_db /* {
     // В эти массивы нужно по факту добавлять обьекты (ненужные ключи с массивами можно убрать)
     terver: [],
     ru_l: [],
@@ -149,7 +150,7 @@ const homework: homework_array = {
     geo: [],
     proj: [],
     bio: [],
-};
+};*/
 
 export default defineAppConfig({
     ui: {
