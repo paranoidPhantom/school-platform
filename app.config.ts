@@ -76,19 +76,39 @@ const homework: homework_array = {
     ru_l: [],
     kl_chas: [],
     chem: [],
-    alg: [],
+    alg: [
+        {
+            text: "<ul><li>576,577,581, 582 все четные задания</li></ul>",
+            date_due: "8/9/2023",
+            date: "6/9/2023",
+            attachments: [
+                "algebra/06-09.png"
+            ]
+        }
+    ],
     phys: [],
     lit: [
         {
-            text: "<ul><li>Описать город Калинов и его обитателей(действия 1-4) с помощью диалогов, монологов, реплик, ремарок, эпитетов, сравнений и т.д.</li><li>Краткая характеристика героев</li></ul>",
-            date_due: "8/9/2023",
-            date: "5/9/2023",
+            text: "<ul><li>Рассказ о семье кабановых. Быт и нравы тёмного царства(закладки).</li> <li>Наизусть чтение монологов по выбору</li></ul>",
+            date: "6/9/2023",
+            date_due: "11/9/2023"
         },
+        {
+            text: "<ul><li>Описать город Калинов и его обитателей(действия 1-4) с помощью диалогов, монологов, реплик, ремарок, эпитетов, сравнений и т.д.</li><li>Краткая характеристика героев</li></ul>",
+            date_due: "6/9/2023",
+            date: "5/9/2023",
+        }
     ],
     phys_ed: [],
     en_l: [
         {
-            text: "Упражнение 4B",
+            text: "<h2>Группа Утёмовой Е.И.:</h2><ul><li>8 упражнение(страница 9)</li> <li>Составить 5 предложений используя 3 упражнение(стр. 10)</li></ul>",
+            date: "6/9/2023",
+            date_due: "7/9/2023"
+        },
+        {
+            text: "<h2>Группа Утёмовой Е.И.:</h2><ul><li>Упражнение 4B</li></ul>",
+            date: "5/9/2023",
             date_due: "6/9/2023",
         },
     ],
@@ -96,7 +116,7 @@ const homework: homework_array = {
         {
             text: "<ul><li>Стр. 17-20</li><li>Видео на почте</li></ul>",
             date: "5/9/2023",
-            date_due: "6/9/2023",
+            date_due: "8/9/2023",
         },
     ],
     inf: [
@@ -106,14 +126,26 @@ const homework: homework_array = {
             date_due: "7/9/2023",
         },
     ],
-    obzh: [],
+    obzh: [
+        {
+            text: `Читать 1 § (стр. 5-11)`,
+            date: "6/9/2023",
+            date_due: "13/9/2023"
+        }
+    ],
     geom: [
         {
             text: "<ul><li>Дописать 2-3 аксиомы планиметрии</li><li>Выучить аксиомы А1, А2, А3</li><li>Прочитать пункты 1, 2</li></ul>",
             date_due: "8/9/2023",
         },
     ],
-    obsh: [],
+    obsh: [
+        {
+            text: `Читать 1 §`,
+            date: "6/9/2023",
+            date_due: "13/9/2023"
+        }
+    ],
     geo: [],
     proj: [],
     bio: [],
@@ -407,7 +439,7 @@ export default defineAppConfig({
                     location: "math",
                 },
                 {
-                    subject: "hist",
+                    subject: "obsh",
                     teacher: "pn",
                     location: "hist",
                 },
@@ -417,7 +449,7 @@ export default defineAppConfig({
                     location: "hist",
                 },
                 {
-                    subject: "ru_l",
+                    subject: "lit",
                     teacher: "ev",
                     location: "ru",
                 },
@@ -478,7 +510,7 @@ export default defineAppConfig({
                     location: "ru",
                 },
                 {
-                    subject: "lit",
+                    subject: "ru_l",
                     teacher: "ev",
                     location: "ru",
                 },
@@ -498,7 +530,7 @@ export default defineAppConfig({
                     location: "sport",
                 },
                 {
-                    subject: "obsh",
+                    subject: "hist",
                     teacher: "pn",
                     location: "hist",
                 },
