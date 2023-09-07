@@ -1,3 +1,10 @@
+<script setup lang="ts">
+
+onMounted(() => {
+	document.documentElement.classList.add("dark")
+})
+</script>
+
 <template>
 	<NuxtPage />
 </template>
