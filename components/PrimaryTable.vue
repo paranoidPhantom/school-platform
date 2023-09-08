@@ -232,7 +232,7 @@ const normalizeDate = (date: string | undefined) => {
                                             src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c9a27e0a-52f7-4cec-a932-b6246308a58e/dfnukjz-0f4dc473-62cc-473c-8ee8-e1a01f5787f6.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2M5YTI3ZTBhLTUyZjctNGNlYy1hOTMyLWI2MjQ2MzA4YTU4ZVwvZGZudWtqei0wZjRkYzQ3My02MmNjLTQ3M2MtOGVlOC1lMWEwMWY1Nzg3ZjYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.LAy1v69f0jD8PocZATncuHCTwKz2SZvzoNOYEK3mUwY">
                                         <p>А нету ничо пока<br>Ну вообще збс так-то</p>
                                     </div>
-                                    <div class="instance" v-for="instance in homework[lesson.subject]">
+                                    <div class="instance" v-for="(instance, instance_index) in homework[lesson.subject]">
                                         <p class="primary" v-html="instance.text"></p>
                                         <div class="attachments" v-if="instance.attachments?.length > 0">
                                             <ContentSlideshow :content="instance.attachments"
@@ -241,6 +241,7 @@ const normalizeDate = (date: string | undefined) => {
                                         <div class="dates">
                                             <p class="date">{{ instance.date ? `Задано:`: `` }} {{ normalizeDate(instance.date) }}
                                             </p>
+                                            <NuxtLink :to="`/homework/${modal.lesson.subject}/${instance_index}`"><UButton color="white" label="Больше информации"/></NuxtLink>
                                             <p class="due-date">Нужно сдать: {{ normalizeDate(instance.date_due) }}</p>
                                         </div>
                                     </div>
