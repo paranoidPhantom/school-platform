@@ -37,5 +37,8 @@ h1,h2,h3,h4,h5,h6,p,button,a, span {
 .page-enter-active,
 .page-leave-active {
 	transition: all 0.3s;
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
 </style>
