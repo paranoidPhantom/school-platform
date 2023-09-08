@@ -22,18 +22,22 @@ const normalizeDate = (date: string | undefined) => {
 </script>
 
 <template>
-    <main>
-        <NuxtLink to="/"><Icon style="font-size: 2rem;" name="material-symbols:arrow-back-rounded"/></NuxtLink>
-        <div class="text" v-html="homework.text"></div>
-        <div class="attachments" v-if="homework.attachments?.length > 0">
-            <ContentSlideshow :content="homework.attachments" prefix="/media/attachments/" />
-        </div>
-        <div class="dates">
-            <p class="date">{{ homework.date ? `Задано:` : `` }} {{ normalizeDate(homework.date) }}
-            </p>
-            <p class="due-date">Нужно сдать: {{ normalizeDate(homework.date_due) }}</p>
-        </div>
-    </main>
+    <div class="root">
+        <main>
+            <NuxtLink to="/">
+                <Icon style="font-size: 2rem;" name="material-symbols:arrow-back-rounded" />
+            </NuxtLink>
+            <div class="text" v-html="homework.text"></div>
+            <div class="attachments" v-if="homework.attachments?.length > 0">
+                <ContentSlideshow :content="homework.attachments" prefix="/media/attachments/" />
+            </div>
+            <div class="dates">
+                <p class="date">{{ homework.date ? `Задано:` : `` }} {{ normalizeDate(homework.date) }}
+                </p>
+                <p class="due-date">Нужно сдать: {{ normalizeDate(homework.date_due) }}</p>
+            </div>
+        </main>
+    </div>
 </template>
 
 <style scoped lang="scss">
@@ -47,12 +51,6 @@ main {
     display: flex;
     gap: 1rem;
     flex-direction: column;
-
-    .text {
-        li {
-            list-style: initial;
-        }
-    }
 
     .dates {
         display: flex;
@@ -68,6 +66,20 @@ main {
     main {
         margin: 0.75rem;
         padding: 0.75rem;
+    }
+}
+</style>
+
+<style lang="scss">
+main .text {
+    h2 {
+        font-size: 1.25rem;
+        margin: 0.5rem 0;
+        filter: drop-shadow(0 0.1rem 0.3rem white);
+    }
+    li {
+        list-style: initial;
+        margin-left: 1.5rem;
     }
 }
 </style>

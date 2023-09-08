@@ -133,7 +133,7 @@ const modal_tabs = [{
     label: 'Домашнее задание',
     icon: 'material-symbols:menu-book-outline-rounded',
     key: 'hw'
-},{
+}, {
     label: 'Информация',
     icon: 'material-symbols:info-outline',
     key: 'info'
@@ -239,9 +239,12 @@ const normalizeDate = (date: string | undefined) => {
                                                 prefix="/media/attachments/" />
                                         </div>
                                         <div class="dates">
-                                            <p class="date">{{ instance.date ? `Задано:`: `` }} {{ normalizeDate(instance.date) }}
+                                            <p class="date">{{ instance.date ? `Задано:` : `` }} {{
+                                                normalizeDate(instance.date) }}
                                             </p>
-                                            <NuxtLink :to="`/homework/${modal.lesson.subject}/${instance_index}`"><UButton color="white" label="Больше информации"/></NuxtLink>
+                                            <NuxtLink :to="`/homework/${modal.lesson.subject}/${instance_index}`">
+                                                <UButton color="white" label="Больше информации" />
+                                            </NuxtLink>
                                             <p class="due-date">Нужно сдать: {{ normalizeDate(instance.date_due) }}</p>
                                         </div>
                                     </div>
@@ -279,8 +282,7 @@ const normalizeDate = (date: string | undefined) => {
             </div>
             <div class="card" v-for="(lesson, lessonIndex) in (schedule.lessons[index] as lesson[])"
                 @click="modal.lesson = lesson as typeof modal.lesson; modal.open = true"
-                @mouseenter="current_hover_subject = lesson.subject"
-                @mouseleave="current_hover_subject = ''"
+                @mouseenter="current_hover_subject = lesson.subject" @mouseleave="current_hover_subject = ''"
                 :class="{ highlight: current_hover_subject === lesson.subject, current: index === currentTime.day - 1 && (lessonIndex + 1 === currentTime.lessonIndex / 2 || lessonIndex * 2 === currentTime.lessonIndex + 1), idle: lessonIndex * 2 === currentTime.lessonIndex + 1 }">
                 <span>
                     <Icon :name="subjectData(lesson.subject).icon" /> {{ subjectData(lesson.subject).short }}
@@ -375,6 +377,12 @@ const normalizeDate = (date: string | undefined) => {
             padding: 1rem;
             margin: 1rem 2px;
 
+            h2 {
+                font-size: 1.25rem;
+                margin: 0.5rem 0;
+                filter: drop-shadow(0 0.1rem 1px white);
+            }
+
             .primary {
                 li {
                     list-style: initial;
@@ -453,6 +461,7 @@ const normalizeDate = (date: string | undefined) => {
             padding: 1px;
             display: flex;
             justify-content: center;
+
             &.highlight:not(:hover) {
                 outline: 1px solid rgba(0, 255, 179, 0.5);
             }
@@ -468,6 +477,7 @@ const normalizeDate = (date: string | undefined) => {
                 background-color: grey;
                 border-radius: 1rem;
                 opacity: 0.5;
+
                 &.hashw {
                     background-color: orange;
                 }
