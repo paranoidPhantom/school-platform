@@ -27,4 +27,15 @@ h1,h2,h3,h4,h5,h6,p,button,a, span {
     color: white;
     font-family: sans-serif;
 }
+
+.page-enter-from,
+.page-leave-to {
+	translate: -5% 0;
+	opacity: 0;
+}
+
+.page-enter-active,
+.page-leave-active {
+	transition: all 0.3s;
+}
 </style>
