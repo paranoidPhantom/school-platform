@@ -113,11 +113,12 @@ const openLink = (link: string) => {
       </div>
       <!-- Content placeholders -->
       <TransitionGroup :name="transitionName">
-        <img v-if="data && (data.endsWith('webp') || data.endsWith('png') || data.endsWith('jpg'))" @click="openLink(prefix+data)" :src="prefix+data"
-          :key="slideID">
+        <img v-if="data && (data.endsWith('webp') || data.endsWith('png') || data.endsWith('jpg'))"
+          :src="prefix + data" :key="slideID">
         <video v-else-if="data && data.endsWith('mp4')" :src="data" :key="slideID + 2"></video>
-        <iframe v-else :key="slideID + 3" :src="`https://www.youtube-nocookie.com/embed/${data}?modestbranding=true`"
-          title="YouTube video player" frameborder="0"
+        <iframe style="aspect-ratio: 16 / 9;" v-else :key="slideID + 3"
+          :src="`https://www.youtube-nocookie.com/embed/${data}?modestbranding=true`" title="YouTube video player"
+          frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
       </TransitionGroup>
@@ -132,10 +133,10 @@ const openLink = (link: string) => {
 .content-container {
   border-radius: 8px;
   width: 100%;
-  aspect-ratio: 16 / 9;
   border: 1px rgba(255, 255, 255, 0.3) solid;
   overflow: hidden;
   position: relative;
+  aspect-ratio: 16 / 9;
 
   >iframe,
   >img,
@@ -165,7 +166,7 @@ const openLink = (link: string) => {
     opacity: 0;
     transition: all 0.3s ease-in-out;
     overflow: hidden;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
 
     .filler {
       position: absolute;
@@ -187,17 +188,18 @@ const openLink = (link: string) => {
         outline: none;
       }
     }
-    
+
     >button.active {
       transition: all 0.15s;
       scale: 1.2;
       translate: 30% 0;
+
       &.right {
         translate: -30% 0;
       }
     }
 
-    >button.left > svg {
+    >button.left>svg {
       -webkit-transform: scaleX(-1);
       transform: scaleX(-1);
     }
