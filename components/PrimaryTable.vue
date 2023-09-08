@@ -238,15 +238,17 @@ const normalizeDate = (date: string | undefined) => {
                                             <ContentSlideshow :content="instance.attachments"
                                                 prefix="/media/attachments/" />
                                         </div>
+
                                         <div class="dates">
                                             <p class="date">{{ instance.date ? `Задано:` : `` }} {{
                                                 normalizeDate(instance.date) }}
                                             </p>
-                                            <NuxtLink :to="`/homework/${modal.lesson.subject}/${instance_index}`">
-                                                <UButton color="white" label="Больше информации" />
-                                            </NuxtLink>
                                             <p class="due-date">Нужно сдать: {{ normalizeDate(instance.date_due) }}</p>
                                         </div>
+
+                                        <NuxtLink :to="`/homework/${modal.lesson.subject}/${instance_index}`">
+                                            <UButton color="white" label="Больше информации" />
+                                        </NuxtLink>
                                     </div>
                                 </div>
                             </UCard>
@@ -608,4 +610,5 @@ const normalizeDate = (date: string | undefined) => {
     .container {
         display: none;
     }
-}</style>
+}
+</style>
