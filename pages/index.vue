@@ -4,13 +4,15 @@ const title = "Расписание уроков блин (10Б, 2023-24)"
 </script>
 
 <template>
-    <title>{{ title }}</title>
-    <h1 class="info">{{ title }}</h1>
-    <PrimaryTable />
-    <div class="mobile-indicator">
-        <Icon class="icon" name="material-symbols:screen-rotation-outline"/>
-        <span>Экран блин поверни</span>
-    </div>
+    <main>
+        <title>{{ title }}</title>
+        <h1 class="info">{{ title }}</h1>
+        <PrimaryTable />
+        <div class="mobile-indicator">
+            <Icon class="icon" name="material-symbols:screen-rotation-outline"/>
+            <span>Экран блин поверни</span>
+        </div>
+    </main>
 </template>
 
 <style scoped lang="scss">
