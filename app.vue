@@ -1,7 +1,11 @@
 <script setup lang="ts">
+const { query } = useRoute()
 
 onMounted(() => {
 	document.documentElement.classList.add("dark")
+	if (query.help === "true") {
+		document.documentElement.classList.add("help-enabled")
+	}
 })
 </script>
 
