@@ -382,7 +382,7 @@ const normalizeDate = (date: string | undefined) => {
             h2 {
                 font-size: 1.25rem;
                 margin: 0.5rem 0;
-                filter: drop-shadow(0 0.1rem 1px white);
+                filter: drop-shadow(0 0.1rem 0.5rem white);
             }
 
             .primary {
