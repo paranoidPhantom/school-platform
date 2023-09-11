@@ -111,10 +111,14 @@ const openLink = (link: string) => {
           </button>
         </Transition>
       </div>
+      <a class="download" v-if="data && (data.endsWith('webp') || data.endsWith('png') || data.endsWith('jpg'))"
+        :href="prefix + data" :download="data.replaceAll('/', '-')">
+        <Icon name="line-md:downloading-loop" />
+      </a>
       <!-- Content placeholders -->
       <TransitionGroup :name="transitionName">
-        <img v-if="data && (data.endsWith('webp') || data.endsWith('png') || data.endsWith('jpg'))"
-          :src="prefix + data" :key="slideID">
+        <img v-if="data && (data.endsWith('webp') || data.endsWith('png') || data.endsWith('jpg'))" :src="prefix + data"
+          :key="slideID" type="image/png">
         <video v-else-if="data && data.endsWith('mp4')" :src="data" :key="slideID + 2"></video>
         <iframe style="aspect-ratio: 16 / 9;" v-else :key="slideID + 3"
           :src="`https://www.youtube-nocookie.com/embed/${data}?modestbranding=true`" title="YouTube video player"
@@ -145,6 +149,22 @@ const openLink = (link: string) => {
     height: 100%;
     object-fit: cover;
     cursor: pointer;
+  }
+
+  .download {
+    width: 2rem;
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 0.3rem;
+    outline: 1px solid rgba(255, 255, 255, 0.3);
+    aspect-ratio: 1 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.4);
+    backdrop-filter: blur(2px);
   }
 
   .slideshow-controls {
@@ -333,4 +353,5 @@ const openLink = (link: string) => {
   .content-container {
     width: 100%;
   }
-}</style>
+}
+</style>
