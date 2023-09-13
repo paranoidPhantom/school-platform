@@ -246,7 +246,7 @@ const normalizeDate = (date: string | undefined) => {
                                             <p class="due-date">Нужно сдать: {{ normalizeDate(instance.date_due) }}</p>
                                         </div>
 
-                                        <NuxtLink :to="`/homework/${modal.lesson.subject}/${instance_index}`">
+                                        <NuxtLink class="details" :to="`/homework/${modal.lesson.subject}/${instance_index}`">
                                             <UButton color="white" label="Больше информации" />
                                         </NuxtLink>
                                     </div>
@@ -389,6 +389,10 @@ const normalizeDate = (date: string | undefined) => {
                 li {
                     list-style: initial;
                 }
+            }
+
+            .details {
+                width: fit-content;
             }
 
             .dates {
