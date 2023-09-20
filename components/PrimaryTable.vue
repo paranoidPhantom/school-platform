@@ -202,7 +202,7 @@ const normalizeDate = (date: string | undefined) => {
                             </div>
                         </template>
                         <template #item="{ item }">
-                            <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                            <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800', body: {padding: 'p-2 lh:p-4'}, header: {padding: 'px-4 py-2 lh:p-4'} }">
                                 <template #header>
                                     <span class="header">
                                         <Icon :name="subjectData(lesson.subject).icon" />{{ subjectData(lesson.subject).full
@@ -607,6 +607,12 @@ const normalizeDate = (date: string | undefined) => {
 
     .card>span {
         font-size: 0.6rem;
+    }
+    .modal {
+        width: 90%;
+        .hw {
+            max-height: calc(100vh - 10rem);
+        }
     }
 }
 
