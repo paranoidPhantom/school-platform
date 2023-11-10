@@ -86,14 +86,11 @@ const handleTimeCheck = () => {
     if (weekDayID > 0 && weekDayID < 6) {
         schedule.times.forEach((time, index) => {
             const { start, end } = time
-            console.log("_")
             if (isTimeBetween(Now, start, end)) {
                 currentTime.lessonIndex = (index + 1) * 2
-                console.log("A")
                 return
             } else if (index > 0 && isTimeBetween(Now, schedule.times[index - 1].end, start)) {
                 currentTime.lessonIndex = index * 2 - 1
-                console.log("B")
                 return
             }
         });
