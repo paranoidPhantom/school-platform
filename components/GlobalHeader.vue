@@ -1,4 +1,6 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const { $pwa } = useNuxtApp();
+</script>
 
 <template>
     <header>
@@ -6,7 +8,7 @@
         <UBadge
             variant="subtle"
             class="flex gap-2 w-fit"
-            v-if="$pwa.isPWAInstalled"
+            v-if="$pwa && $pwa.isPWAInstalled"
             ><Icon name="heroicons:check-badge-16-solid" /> Установлено как
             приложение</UBadge
         >
