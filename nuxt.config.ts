@@ -1,9 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	experimental: {
-		appManifest: true,
-		payloadExtraction: true
-	},
 	modules: ['@vite-pwa/nuxt', '@nuxtjs/mdc', '@nuxt/ui', 'nuxt-icon', '@nuxtjs/supabase'],
 	app: {
 		pageTransition: {
@@ -12,7 +8,6 @@ export default defineNuxtConfig({
 		}
 	},
 	supabase: {
-		url: "https://hnqhysplqjytdgidjywu.supabase.co",
 		redirect: false
 	},
 	pwa: {
@@ -53,7 +48,7 @@ export default defineNuxtConfig({
 			navigateFallbackDenylist: [/^\/homework/]
 		},
 		devOptions: {
-			enabled: true,
+			enabled: false,
 			type: "module"
 		}
 	}
