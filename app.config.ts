@@ -77,7 +77,7 @@ const homework: homework_array = homework_db
 
 export default defineAppConfig({
     ui: {
-        primary: "green",
+        primary: "blue",
         gray: "neutral",
     },
     homework: homework,

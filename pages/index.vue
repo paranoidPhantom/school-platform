@@ -1,12 +1,9 @@
 <script setup lang="ts">
-const title = "Расписание уроков блин (10Б, 2023-24)"
 
 </script>
 
 <template>
     <main>
-        <title>{{ title }}</title>
-        <h1 class="info">{{ title }}</h1>
         <PrimaryTable />
         <div class="mobile-indicator">
             <Icon class="icon" name="material-symbols:screen-rotation-outline"/>
@@ -20,6 +17,9 @@ const title = "Расписание уроков блин (10Б, 2023-24)"
     text-align: center;
     width: 100%;
     margin: 1rem 0;
+	font-weight: 200;
+	font-size: 2rem;
+	opacity: 0.5;
 }
 
 @keyframes spin {

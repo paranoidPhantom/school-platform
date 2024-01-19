@@ -1,44 +1,151 @@
 <script setup lang="ts">
-const { query } = useRoute()
+const supabase = useSupabaseClient();
+
+const homework = useState("homework_global", () => {
+    return {};
+});
+
+const { query } = useRoute();
+
+// If you want to use it in setup, import from the nuxtApp.
+const { $pwa } = useNuxtApp();
+
+const router = useRouter();
+
+const modal = useState<{
+    open: boolean;
+    lesson: {
+        subject: string;
+        teacher: string;
+        location: string;
+    };
+}>("global_modal", () => {
+    return {
+        open: false,
+        lesson: {
+            subject: "ru_l",
+            teacher: "ev",
+            location: "ru",
+        },
+    };
+});
+
+router.afterEach(() => (modal.value.open = false));
+const toast = useToast();
 
 onMounted(() => {
-	document.documentElement.classList.add("dark")
-	if (query.help === "true") {
-		document.documentElement.classList.add("help-enabled")
-	}
-})
+    document.documentElement.classList.add("dark");
+    if (query.help === "true") {
+        document.documentElement.classList.add("help-enabled");
+    }
+    if ($pwa && $pwa.offlineReady)
+        toast.add({
+            title: "Веб приложение установлено",
+        });
+});
+
+useHead({
+    titleTemplate: (title) =>
+        title ? `${title} | 10Б` : `Домашнее задание | 10Б`,
+});
+
+const loading = ref(true)
+
+onMounted(async () => {
+	loading.value = false
+    homework.value = {};
+    const { data } = await supabase.from("homework").select();
+    data?.forEach((hw) => {
+        const subj = hw.subject;
+        if (!homework.value[subj]) homework.value[subj] = [];
+        delete hw.subject;
+        homework.value[subj].push(hw);
+    });
+});
 </script>
 
 <template>
-	<NuxtPage />
+	<div id="app_container">
+		<div v-if="loading" class="loader">
+			<Icon style="margin: auto; font-size: 4rem; opacity: 0.5;" name="svg-spinners:ring-resize"/>
+		</div>
+		<Head>
+			<Link
+				rel="apple-touch-icon"
+				href="/icons/apple_homework.png"
+				sizes="180x180"
+			/>
+		</Head>
+		<GlobalHeader />
+		<NuxtPwaManifest />
+        <ModalWindow />
+        <NuxtPage />
+		<UNotifications />
+		<div class="upd-notice" v-show="$pwa && $pwa.needRefresh">
+			<span>Доступно обновление, перезагрузите чтобы установить</span>
+			<UButton @click="$pwa.updateServiceWorker()">Установить</UButton>
+		</div>
+    </div>
 </template>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap");
+
 body {
-	margin: 0;
-	background-color: #000000;
-	opacity: 1;
-	background-position: center;
-	background-image: radial-gradient(rgba(255,255,255,0.4) 0.5px, rgb(10,10,10) 0.5px);
-	background-size: 20px 20px;
+    margin: 0;
+    background-color: rgb(10, 10, 10);
+    opacity: 1;
+    background-position: center;
+    background-size: 20px 20px;
+
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
 }
 
-h1,h2,h3,h4,h5,h6,p,button,a, span {
-    color: white;
-    font-family: sans-serif;
+.loader {
+	display: flex;
+	position: fixed;
+	z-index: 103;
+	inset: 0;
+	background-color: rgb(10, 10, 10);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+button,
+a,
+span {
+    color: rgb(230, 230, 230);
+    opacity: 0.9;
+}
+
+.upd-notice {
+    display: flex;
+    gap: 2rem;
+    position: fixed;
+    inset: 0;
+    top: unset;
+    padding: 1rem;
+    z-index: 2;
 }
 
 .page-enter-from,
 .page-leave-to {
-	translate: -5% 0;
-	opacity: 0;
+    translate: -5% 0;
+    opacity: 0;
 }
 
 .page-enter-active,
 .page-leave-active {
-	transition: all 0.3s;
-	position: absolute;
-	width: 100%;
-	height: 100%;
+    transition: all 0.3s;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 </style>
