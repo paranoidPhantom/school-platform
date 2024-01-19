@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 		}
 	},
 	supabase: {
-		redirect: false
+		redirect: false,
 	},
 	pwa: {
 		includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
