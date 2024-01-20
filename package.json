@@ -9,6 +9,8 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@egjs/flicking-plugins": "^4.7.1",
+    "@egjs/vue3-flicking": "^4.11.2",
     "@nuxt/devtools": "^1.0.1",
     "@nuxt/ui": "^2.7.0",
     "@nuxtjs/mdc": "^0.3.2",

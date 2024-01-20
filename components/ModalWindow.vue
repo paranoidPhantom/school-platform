@@ -112,15 +112,17 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
                             class="card-container"
                             :ui="{
                                 divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-                                body: { padding: 'p-2 lh:p-4' },
+                                body: { padding: 'p-4 lh:p-8' },
                                 header: { padding: 'px-4 py-2 lh:p-4' },
                             }"
                         >
                             <template #header>
-                                <span class="header">
+                                <span class="header" v-for="subject in [subjectData(lesson.subject)]">
                                     <Icon
-                                        :name="subjectData(lesson.subject).icon"
-                                    />{{ subjectData(lesson.subject).full }}
+										class="min-w-4"
+                                        :name="subject.icon"
+                                    />
+									<span class="truncate max-w-full !block">{{ subject.full }}</span>
                                     <button
                                         class="close"
                                         @click="modal.open = false"
@@ -202,9 +204,9 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
                                         :to="`/homework/${modal.lesson.subject}/${instance.id}`"
                                     >
                                         <UButton
-                                            color="white"
-                                            variant="outline"
-                                            label="Больше информации"
+											variant="link"
+											trailing-icon="i-heroicons-arrow-right"
+                                            :label="instance.comments.length > 0 ? `Комментарии - ${instance.comments.length}` : `Оставить комментарий`"
                                         />
                                     </NuxtLink>
                                 </div>
@@ -217,4 +219,104 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
     </ClientOnly>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.modal {
+    position: fixed;
+    z-index: 102;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    box-shadow: 0 0 1rem 100vw rgba(0, 0, 0, 0.5);
+    border-radius: 3rem;
+    width: 65%;
+
+    .close {
+        display: flex;
+        align-items: center;
+        background-color: transparent;
+        padding: 0.25rem;
+        transition: all 0.3s;
+        border-radius: 0.5rem;
+        margin-left: auto;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    }
+
+    span {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        &.header {
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    ul {
+        padding: initial;
+        margin: initial;
+        margin-left: 1rem;
+    }
+
+    svg {
+        height: 100%;
+        transform: scale(1.1);
+    }
+
+    .card-container {
+        min-height: 70vh;
+    }
+
+    .hw {
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        max-height: calc(80vh - 10rem);
+        overflow-y: auto;
+
+        .empty {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
+
+            > img {
+                width: 20%;
+            }
+
+            p {
+                text-align: center;
+            }
+        }
+
+        .instance {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            outline: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 1rem;
+            margin: 1rem 2px;
+
+            .details {
+                width: fit-content;
+            }
+
+            .dates {
+                display: flex;
+                justify-content: space-between;
+
+                p {
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
+}
+</style>

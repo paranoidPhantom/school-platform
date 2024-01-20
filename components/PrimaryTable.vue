@@ -1,8 +1,23 @@
 <script setup lang="ts">
-import type { lesson, subject } from "../types/db"
+import type { lesson, subject } from "../types/db";
+
+import Flicking from "@egjs/vue3-flicking";
+import "@egjs/vue3-flicking/dist/flicking.css";
+import { Perspective } from "@egjs/flicking-plugins";
+
+import { useWindowSize } from "@vueuse/core";
+
+const flicking_plugins = [new Perspective({ rotate: 0.4, scale: 0.5 })];
+const disabled_plugins = [new Perspective({ rotate: 0, scale: 0 })];
+
+const { width } = useWindowSize();
 const { schedule } = useAppConfig();
 
-const homework = useState("homework_global", () => { return {} })
+const ListMode = computed(() => width.value <= 600);
+
+const homework = useState("homework_global", () => {
+    return {};
+});
 
 const current_hover_subject = ref("");
 
@@ -110,23 +125,37 @@ const handleTimeCheck = () => {
 
 let timeCheck: NodeJS.Timeout | null = null;
 
-onMounted(() => {
+const addLaggyEffect = () => {
+    if (ListMode.value) return;
     for (const card of document.querySelectorAll(".card > span:not(.dummy)")) {
         card.addEventListener("mousemove", handleOnMouseMove);
     }
     document.addEventListener("mousemove", handleOnMouseMoveGlobal);
-    timeCheck = setInterval(handleTimeCheck, 1000);
-});
+};
 
-onUnmounted(() => {
+const removeLaggyEffect = () => {
     for (const card of document.querySelectorAll(".card > span:not(.dummy)")) {
         card.removeEventListener("mousemove", handleOnMouseMove);
     }
 
     document.removeEventListener("mousemove", handleOnMouseMoveGlobal);
+};
+
+onMounted(() => {
+    addLaggyEffect();
+    timeCheck = setInterval(handleTimeCheck, 1000);
+});
+
+onUnmounted(() => {
+    removeLaggyEffect();
     if (timeCheck) {
         clearInterval(timeCheck);
     }
+});
+
+watch(ListMode, () => {
+    if (ListMode.value) removeLaggyEffect();
+    else addLaggyEffect();
 });
 
 const subjectData = (subject: keyof typeof schedule.subjects): subject => {
@@ -151,174 +180,98 @@ const hasHomework = (index: number, lesson: keyof typeof schedule.subjects) => {
     }
     return false;
 };
+
+const defIndexFlicker = new Date().getDay() - 1;
 </script>
 
 <template>
     <section class="large-table">
-        <div class="index">
-            <div class="card" style="opacity: 0">
-                <span>#</span>
-                <span class="dummy">#</span>
+        <template v-if="!ListMode">
+            <div class="index">
+                <div class="card" style="opacity: 0">
+                    <span>#</span>
+                    <span class="dummy">#</span>
+                </div>
+                <div class="card" v-for="index in schedule.times.length">
+                    <span>{{ index }}</span>
+                    <span class="dummy">{{ index }}</span>
+                </div>
             </div>
-            <div class="card" v-for="index in schedule.times.length">
-                <span>{{ index }}</span>
-                <span class="dummy">{{ index }}</span>
+            <div class="time">
+                <div class="card">
+                    <span>Время</span>
+                    <span class="dummy">Время</span>
+                </div>
+                <div class="card" v-for="time in schedule.times">
+                    <span>{{ time.start }} - {{ time.end }}</span>
+                    <span class="dummy">{{ time.start }} - {{ time.end }}</span>
+                </div>
             </div>
-        </div>
-        <div class="time">
-            <div class="card">
-                <span>Время</span>
-                <span class="dummy">Время</span>
-            </div>
-            <div class="card" v-for="time in schedule.times">
-                <span>{{ time.start }} - {{ time.end }}</span>
-                <span class="dummy">{{ time.start }} - {{ time.end }}</span>
-            </div>
-        </div>
-        <div
-            class="day"
-            v-for="(day, index) in schedule.days"
-            :class="{ current: index === currentTime.day - 1 }"
+        </template>
+        <Flicking
+            :plugins="ListMode ? flicking_plugins : disabled_plugins"
+            :options="{
+                align: 'center',
+                easing: (x) => 1 - Math.pow(1 - x, 3),
+                defaultIndex: defIndexFlicker,
+                iOSEdgeSwipeThreshold: 0,
+                bound: !ListMode,
+                circular: ListMode,
+                bounce: ListMode ? '30%' : 0,
+                renderOnlyVisible: true,
+                deceleration: 0.01,
+            }"
         >
-            <div class="card">
-                <span>{{ day }}</span>
-                <span class="dummy">{{ day }}</span>
-            </div>
             <div
-                class="card"
-                v-for="(lesson, lessonIndex) in (schedule.lessons[index] as lesson[])"
-                @click="
-                    modal.lesson = lesson as typeof modal.lesson;
-                    modal.open = true;
-                "
-                @mouseenter="current_hover_subject = lesson.subject"
-                @mouseleave="current_hover_subject = ''"
-                :class="{
-                    highlight: current_hover_subject === lesson.subject,
-                    current:
-                        index === currentTime.day - 1 &&
-                        (lessonIndex + 1 === currentTime.lessonIndex / 2 ||
-                            lessonIndex * 2 === currentTime.lessonIndex + 1),
-                    idle: lessonIndex * 2 === currentTime.lessonIndex + 1,
-                }"
+                class="day"
+                v-for="(day, index) in schedule.days"
+                :class="{ current: index === currentTime.day - 1 }"
+                :key="index"
             >
-                <span>
-                    <Icon :name="subjectData(lesson.subject).icon" />
-                    {{ subjectData(lesson.subject).short }}
-                </span>
-                <span class="dummy">
-                    <Icon :name="subjectData(lesson.subject).icon" />
-                    {{ subjectData(lesson.subject).short }}
-                </span>
+                <div class="card">
+                    <span>{{ day }}</span>
+                    <span class="dummy">{{ day }}</span>
+                </div>
                 <div
-                    class="status"
-                    :class="{ hashw: hasHomework(index + 1, lesson.subject) }"
-                ></div>
+                    class="card"
+                    v-for="(lesson, lessonIndex) in (schedule.lessons[index] as lesson[])"
+                    @click="
+                        modal.lesson = lesson as typeof modal.lesson;
+                        modal.open = true;
+                    "
+                    @mouseenter="current_hover_subject = lesson.subject"
+                    @mouseleave="current_hover_subject = ''"
+                    :class="{
+                        highlight: current_hover_subject === lesson.subject,
+                        current:
+                            index === currentTime.day - 1 &&
+                            (lessonIndex + 1 === currentTime.lessonIndex / 2 ||
+                                lessonIndex * 2 ===
+                                    currentTime.lessonIndex + 1),
+                        idle: lessonIndex * 2 === currentTime.lessonIndex + 1,
+                    }"
+                >
+                    <span>
+                        <Icon :name="subjectData(lesson.subject).icon" />
+                        {{ subjectData(lesson.subject).short }}
+                    </span>
+                    <span class="dummy">
+                        <Icon :name="subjectData(lesson.subject).icon" />
+                        {{ subjectData(lesson.subject).short }}
+                    </span>
+                    <div
+                        class="status"
+                        :class="{
+                            hashw: hasHomework(index + 1, lesson.subject),
+                        }"
+                    ></div>
+                </div>
             </div>
-        </div>
+        </Flicking>
     </section>
 </template>
 
 <style lang="scss">
-.modal {
-    position: fixed;
-    z-index: 102;
-    left: 50%;
-    top: 50%;
-    translate: -50% -50%;
-    box-shadow: 0 0 1rem 100vw rgba(0, 0, 0, 0.5);
-    border-radius: 3rem;
-    width: 65%;
-
-    .close {
-        display: flex;
-        align-items: center;
-        background-color: transparent;
-        padding: 0.25rem;
-        transition: all 0.3s;
-        border-radius: 0.5rem;
-        margin-left: auto;
-
-        &:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-    }
-
-    span {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-
-        &.header {
-            font-size: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-        }
-    }
-
-    ul {
-        padding: initial;
-        margin: initial;
-        margin-left: 1rem;
-    }
-
-    svg {
-        height: 100%;
-        transform: scale(1.1);
-    }
-
-    .card-container {
-        min-height: 70vh;
-    }
-
-    .hw {
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-        max-height: calc(80vh - 10rem);
-        overflow-y: auto;
-
-        .empty {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            gap: 1rem;
-
-            > img {
-                width: 20%;
-            }
-
-            p {
-                text-align: center;
-            }
-        }
-
-        .instance {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            outline: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 1rem;
-            margin: 1rem 2px;
-
-            .details {
-                width: fit-content;
-            }
-
-            .dates {
-                display: flex;
-                justify-content: space-between;
-
-                p {
-                    opacity: 0.7;
-                }
-            }
-        }
-    }
-}
 
 .large-table {
     span.icon {
@@ -352,11 +305,13 @@ const hasHomework = (index: number, lesson: keyof typeof schedule.subjects) => {
         }
     }
 
-    > div:not(.modal) {
+    .day,
+    .time,
+    .index {
         padding: calc(var(--gap-size) / 2);
         display: flex;
         flex-direction: column;
-        width: calc((100% - var(--index-width)) / 5.5);
+        width: calc((100% - var(--index-width)) / 5);
         min-width: fit-content;
         gap: var(--gap-size);
 
@@ -532,7 +487,7 @@ const hasHomework = (index: number, lesson: keyof typeof schedule.subjects) => {
         font-size: 0.7rem;
     }
     .modal {
-        width: 90%;
+        width: 95%;
         .hw {
             max-height: calc(100vh - 10rem);
         }
@@ -540,8 +495,23 @@ const hasHomework = (index: number, lesson: keyof typeof schedule.subjects) => {
 }
 
 @media (max-width: 600px) {
-    .large-table {
-        display: none;
+    .card {
+        > span {
+            font-size: 1.2rem;
+            svg {
+                font-size: 0.85rem;
+            }
+        }
+    }
+}
+
+@media (min-width: 600px) {
+    .flicking-viewport {
+        width: 100%;
+        overflow: visible;
+        .flicking-camera {
+            transform: none !important;
+        }
     }
 }
 </style>

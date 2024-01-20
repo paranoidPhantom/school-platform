@@ -17,7 +17,6 @@ export default defineNuxtConfig({
 			short_name: "ДЗ | 10Б",
 			description: "Платформа для нашего класса включающая рассписание уроков, удобную систему для записи и решения домашнего задания.",
 			theme_color: '#0a0a0a',
-			orientation: "landscape",
 			icons: [
 				{
 					src: "icons/homework.png",
@@ -44,11 +43,11 @@ export default defineNuxtConfig({
 		registerType: 'autoUpdate',
 		workbox: {
 			navigateFallback: "/",
-			globPatterns: ['_nuxt/*.{js,css,html,ico,png,svg}'],
-			navigateFallbackDenylist: [/^\/homework/]
+			globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+			navigateFallbackDenylist: [/^\/homework/, /^\/auth/, /^\/callback/]
 		},
 		devOptions: {
-			enabled: false,
+			enabled: true,
 			type: "module"
 		}
 	}

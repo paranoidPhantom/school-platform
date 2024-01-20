@@ -7,9 +7,7 @@ const homework = useState("homework_global", () => {
 
 const { query } = useRoute();
 
-// If you want to use it in setup, import from the nuxtApp.
-const { $pwa } = useNuxtApp();
-
+const route = useRoute();
 const router = useRouter();
 
 const modal = useState<{
@@ -30,6 +28,14 @@ const modal = useState<{
     };
 });
 
+watchEffect(() => {
+	useHead({
+		titleTemplate: (title) =>
+			title ? `${title} | 10Б` : `Домашнее задание | 10Б`,
+		title: route.meta.title ? route.meta.title : undefined
+	});
+})
+
 router.afterEach(() => (modal.value.open = false));
 const toast = useToast();
 
@@ -38,15 +44,6 @@ onMounted(() => {
     if (query.help === "true") {
         document.documentElement.classList.add("help-enabled");
     }
-    if ($pwa && $pwa.offlineReady)
-        toast.add({
-            title: "Веб приложение установлено",
-        });
-});
-
-useHead({
-    titleTemplate: (title) =>
-        title ? `${title} | 10Б` : `Домашнее задание | 10Б`,
 });
 
 const loading = ref(true)
@@ -54,7 +51,7 @@ const loading = ref(true)
 onMounted(async () => {
 	loading.value = false
     homework.value = {};
-    const { data } = await supabase.from("homework").select();
+    const { data } = await supabase.from("homework").select("*, comments(*)");
     data?.forEach((hw) => {
         const subj = hw.subject;
         if (!homework.value[subj]) homework.value[subj] = [];
@@ -66,6 +63,7 @@ onMounted(async () => {
 
 <template>
 	<div id="app_container">
+		<ProfileSetup />
 		<div v-if="loading" class="loader">
 			<Icon style="margin: auto; font-size: 4rem; opacity: 0.5;" name="svg-spinners:ring-resize"/>
 		</div>
@@ -81,10 +79,6 @@ onMounted(async () => {
         <ModalWindow />
         <NuxtPage />
 		<UNotifications />
-		<div class="upd-notice" v-show="$pwa && $pwa.needRefresh">
-			<span>Доступно обновление, перезагрузите чтобы установить</span>
-			<UButton @click="$pwa.updateServiceWorker()">Установить</UButton>
-		</div>
     </div>
 </template>
 
@@ -101,6 +95,12 @@ body {
 
     font-family: "Raleway", sans-serif;
     font-optical-sizing: auto;
+}
+
+.object-cover {
+	* {
+		object-fit: cover;
+	}
 }
 
 .loader {
@@ -122,7 +122,7 @@ button,
 a,
 span {
     color: rgb(230, 230, 230);
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .upd-notice {
