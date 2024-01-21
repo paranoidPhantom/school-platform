@@ -16,6 +16,11 @@ const items = computed(() => {
     ];
     if (user.value) retval.push([
         {
+            label: "Выложить ДЗ",
+            icon: "i-heroicons-arrow-up-on-square-16-solid",
+            href: "/homework/new"
+        }],
+        [{
             label: "Личный кабинет",
             icon: "i-heroicons-adjustments-vertical-20-solid",
             href: "/auth/me"

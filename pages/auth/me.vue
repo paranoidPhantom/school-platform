@@ -60,6 +60,7 @@ onMounted(() => {
                         v-model="state.avatar_url"
                     />
                     <UAvatar
+						size="2xl"
                         :src="state.avatar_url"
                         icon="i-heroicons-photo-16-solid"
                         class="m-2"

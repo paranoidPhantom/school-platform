@@ -61,6 +61,7 @@ const onSubmit = async (event: FormSubmitEvent<any>) => {
 					<p class="text-sm opacity-50 my-2">(Извиняйте, платить за серваки куда вы будете грузить свои говноавтарки я не буду)</p>
 					<UInput class="my-2" placeholder="https://example.com/avatar.png" v-model="state.avatar_url" />
                     <UAvatar
+						size="2xl"
                         :src="state.avatar_url"
                         icon="i-heroicons-photo-16-solid"
                         class="m-2"

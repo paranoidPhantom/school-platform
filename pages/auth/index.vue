@@ -22,12 +22,35 @@ const validate = (state: any): FormError[] => {
     return errors;
 };
 
+const loading = ref(false)
+const toast = useToast()
+
 const onSubmit = async (event: FormSubmitEvent<any>) => {
+	if (loading.value) return
+	loading.value = true
 	const { error } = await supabase.auth.signInWithPassword(event.data)
-	if (!error) router.push(route.query.flow_dest as string || '/')
+	if (error) {
+		const { data: userExists } = await useFetch("/api/userWithEmailExists", {
+			query: {
+				email: event.data.email,
+			}
+		})
+		if (userExists.value) {
+			toast.add({
+				title: "Ошибка авторизации",
+				description: "Неверный email или пароль",
+				color: "red",
+				timeout: 5000,
+			})
+			loading.value = false
+		} else {
+			const { error } = await supabase.auth.signUp(event.data)
+			if (!error) router.push("/auth/sent")
+			else loading.value = false
+		}
+	}
+	else router.push(route.query.flow_dest as string || '/')
 }
-
-
 </script>
 
 <template>
@@ -48,7 +71,7 @@ const onSubmit = async (event: FormSubmitEvent<any>) => {
                 <UInput v-model="state.password" type="password" />
             </UFormGroup>
 			<div class="flex justify-center">
-				<UButton type="submit" variant="soft">Авторизоваться</UButton>
+				<UButton :loading="loading" type="submit" variant="soft">Авторизоваться</UButton>
 			</div>
             <hr class="w-9/12 mx-auto opacity-10">
 			<OAuthProviders />

@@ -10,6 +10,18 @@ export default defineNuxtConfig({
 	supabase: {
 		redirect: false,
 	},
+	mdc: {
+		headings: {
+			anchorLinks: {
+				h1: false,
+				h2: false,
+				h3: false,
+				h4: false,
+				h5: false,
+				h6: false
+			}
+		}
+	},
 	pwa: {
 		includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
 		manifest: {
@@ -44,7 +56,7 @@ export default defineNuxtConfig({
 		workbox: {
 			navigateFallback: "/",
 			globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-			navigateFallbackDenylist: [/^\/homework/, /^\/auth/, /^\/callback/]
+			navigateFallbackDenylist: [/^\/homework/, /^\/auth/, /^\/callback/, /^\//]
 		},
 		devOptions: {
 			enabled: true,

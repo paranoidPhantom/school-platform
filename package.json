@@ -11,12 +11,11 @@
   "devDependencies": {
     "@egjs/flicking-plugins": "^4.7.1",
     "@egjs/vue3-flicking": "^4.11.2",
-    "@nuxt/devtools": "^1.0.1",
     "@nuxt/ui": "^2.7.0",
     "@nuxtjs/mdc": "^0.3.2",
     "@nuxtjs/supabase": "^1.1.5",
     "@vite-pwa/nuxt": "^0.4.0",
-    "nuxt": "^3.9.3",
+    "nuxt": "^3.8.2",
     "nuxt-icon": "^0.6.5",
     "sass": "^1.69.5",
     "scss": "^0.2.4"
