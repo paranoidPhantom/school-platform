@@ -1,4 +1,3 @@
-import homework_db from "./hw.json" assert { type: "json" };
 interface time {
     start: string;
     end: string;
@@ -73,14 +72,11 @@ interface homework_array {
     bio?: homework_instance[];
 }
 
-const homework: homework_array = homework_db
-
 export default defineAppConfig({
     ui: {
-        primary: "green",
-        gray: "neutral",
+        primary: "blue",
+        gray: "slate",
     },
-    homework: homework,
     schedule: {
         days: ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"],
         times: [

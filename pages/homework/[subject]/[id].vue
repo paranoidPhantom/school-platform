@@ -1,60 +1,238 @@
 <script setup lang="ts">
+import type { FormError, FormSubmitEvent } from "#ui/types";
+import { computedAsync } from "@vueuse/core";
 definePageMeta({
-    title: "ДЗ какое-то..."
-})
+    title: "Задание",
+});
 
-//
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
 
-const { homework: hw_array } = useAppConfig()
-const { params } = useRoute()
-const { subject, id } = params
+const { params } = useRoute();
+const { subject, id } = params;
 
-const homework = hw_array[subject][parseInt(id)]
+const homework = ref();
+const route = useRoute();
 
+interface commentFetched {
+    id: number;
+    created_at: string;
+    descendant_of: number;
+    content: string;
+    author_id: string;
+}
+
+interface comment {
+    id: number;
+    content: string;
+    author: {
+        full_name: string;
+        avatar_url: string;
+    };
+    time: string;
+}
+
+const localComments = ref<commentFetched[]>([]);
+
+const comments = computedAsync<comment[]>(async () => {
+    if (homework.value && homework.value.comments) {
+        const retval: comment[] = [];
+        const arr = localComments.value.concat(homework.value.comments).sort((a, b) => {
+			return (a.created_at < b.created_at) ? 1 : ((a.created_at > b.created_at) ? -1 : 0);
+		}) as commentFetched[];
+        for (let i = 0; i < arr.length; i++) {
+            const comment = arr[i];
+            const dateObj = new Date(comment.created_at);
+            const time = `${dateObj.toLocaleTimeString(
+                "ru"
+            )} - ${dateObj.toLocaleDateString("ru")}`;
+            const { data } = await useFetch("/api/userDataFromID", {
+                query: {
+                    UID: comment.author_id,
+                },
+            });
+            retval.push({
+                content: comment.content,
+                author:
+                    Object.keys(data.value).length > 0
+                        ? data.value
+                        : {
+                              full_name: useRandomNameFromKey(comment.author_id),
+                          },
+                time,
+                id: comment.id,
+            });
+        }
+        return retval;
+    }
+}, null);
+
+onMounted(async () => {
+    const { data: fetchedHW } = await supabase
+        .from("homework")
+        .select("*, comments(*)")
+        .eq("id", id)
+        .eq("subject", subject)
+        .single();
+    homework.value = fetchedHW;
+});
 
 const normalizeDate = (date: string | undefined) => {
-    if (!date) { return date }
-    const split = date.split("/")
-    const d = split[0]
-    const m = split[1]
-    return `${d.length < 2 ? '0' + d : d}.${m.length < 2 ? '0' + m : m}`
-}
+    if (!date) {
+        return date;
+    }
+    const split = date.split("/");
+    const d = split[0];
+    const m = split[1];
+    return `${d.length < 2 ? "0" + d : d}.${m.length < 2 ? "0" + m : m}`;
+};
+
+const commentState = reactive({
+    input: "",
+});
+
+const validate = (state: any): FormError[] => {
+    const errors = [];
+    if (!state.input) errors.push({ path: "input", message: "Обязательное поле" })
+    return errors;
+};
+
+const onSubmit = async (event: FormSubmitEvent<any>) => {
+	if (!user.value) return
+	const content = event.data.input
+	const created_at = new Date().toISOString()
+	const pushObject = {
+		content,
+        author_id: user.value.id,
+        descendant_of: homework.value.id,
+        created_at,
+	}
+	const { error } = await supabase.from("comments").insert(pushObject as any)
+	commentState.input = ""
+	if (error) commentState.input = content
+	else localComments.value.push(pushObject as commentFetched)
+};
 </script>
 
 <template>
     <div class="root">
         <main>
             <NuxtLink to="/">
-                <Icon style="font-size: 2rem;" name="material-symbols:arrow-back-rounded" />
+                <Icon
+                    style="font-size: 2rem"
+                    name="material-symbols:arrow-back-rounded"
+                />
             </NuxtLink>
-            <div class="text" v-html="homework.text"></div>
-            <div class="attachments" v-if="homework.attachments?.length > 0">
-                <ContentSlideshow :content="homework.attachments" prefix="/media/attachments/" />
-            </div>
-            <div class="dates">
-                <p class="date">{{ homework.date ? `Задано:` : `` }} {{ normalizeDate(homework.date) }}
-                </p>
-                <p class="due-date">Нужно сдать: {{ normalizeDate(homework.date_due) }}</p>
-            </div>
+            <template v-if="homework">
+                <ContentFormatter class="primary"
+                    ><MDC tag="div" :value="homework.md_text"
+                /></ContentFormatter>
+                <div
+                    class="attachments"
+                    v-if="homework.attachments?.length > 0"
+                >
+                    <ContentSlideshow
+                        :content="homework.attachments"
+                        prefix="/media/attachments/"
+                    />
+                </div>
+                <div class="dates">
+                    <p class="date">
+                        {{ homework.date ? `Задано:` : `` }}
+                        {{ normalizeDate(homework.date) }}
+                    </p>
+                    <p class="due-date">
+                        Нужно сдать: {{ normalizeDate(homework.date_due) }}
+                    </p>
+                </div>
+            </template>
+            <Icon
+                style="margin: auto; font-size: 4rem; opacity: 0.5"
+                v-else
+                name="svg-spinners:ring-resize"
+            />
         </main>
+        <hr
+            style="width: 80%; max-width: 35rem; opacity: 0.1; margin: 0 auto"
+        />
+        <section class="comments">
+            <UAlert
+                :icon="
+                    user
+                        ? `i-heroicons-pencil-square-20-solid`
+                        : `i-heroicons-user-20-solid`
+                "
+                :title="
+                    user
+                        ? 'Оставьте коммениарий'
+                        : `Войдите чтобы комментировать`
+                "
+            >
+                <template #description>
+                    <template v-if="user">
+                        <UForm
+                            @submit="onSubmit"
+                            :validate="validate"
+                            :state="commentState"
+                        >
+                            <UFormGroup name="input">
+                                <UTextarea
+                                    resize
+                                    class="my-4"
+                                    placeholder="Ваш комментарий"
+                                    v-model="commentState.input"
+                                />
+                            </UFormGroup>
+                            <UButton
+                                class="mt-4"
+                                type="submit"
+                                variant="soft"
+                                label="Оставить"
+                            />
+                        </UForm>
+                    </template>
+                    <UButton
+                        v-else
+                        class="mt-2"
+                        label="Войти"
+                        variant="soft"
+                        :to="`/auth?flow_dest=${route.fullPath}`"
+                    />
+                </template>
+            </UAlert>
+            <UAlert
+                class="w-10/12"
+                v-for="comment in comments"
+				:ui="{ avatar: { base: 'object-cover' } }"
+                :avatar="{
+                    src: comment.author.avatar_url,
+                    alt: comment.author.full_name,
+                }"
+                :title="comment.author.full_name"
+                :description="comment.content"
+            />
+        </section>
     </div>
 </template>
 
 <style scoped lang="scss">
 main {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+
     margin: 2rem 10%;
+    min-height: calc(50vh);
     padding: 1rem;
     background-color: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(1px);
     border-radius: 1rem;
     outline: 1px solid rgba(255, 255, 255, 0.3);
-    display: flex;
-    gap: 1rem;
-    flex-direction: column;
 
     .dates {
         display: flex;
         justify-content: space-between;
+        margin-top: auto;
 
         p {
             opacity: 0.7;
@@ -62,24 +240,22 @@ main {
     }
 }
 
+.comments {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+
+    margin: 2rem 15%;
+}
+
 @media (max-width: 800px) {
     main {
         margin: 0.75rem;
         padding: 0.75rem;
     }
-}
-</style>
-
-<style lang="scss">
-main .text {
-    h2 {
-        font-size: 1.25rem;
-        margin: 0.5rem 0;
-        filter: drop-shadow(0 0.1rem 0.3rem white);
-    }
-    li {
-        list-style: initial;
-        margin-left: 1.5rem;
+    .comments {
+        margin: 0.75rem;
     }
 }
 </style>
