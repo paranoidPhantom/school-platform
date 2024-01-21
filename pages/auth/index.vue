@@ -38,7 +38,7 @@ const onSubmit = async (event: FormSubmitEvent<any>) => {
 		if (userExists.value) {
 			toast.add({
 				title: "Ошибка авторизации",
-				description: "Неверный email или пароль",
+				description: error.message,
 				color: "red",
 				timeout: 5000,
 			})
