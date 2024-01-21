@@ -1,5 +1,7 @@
 <script setup lang="ts">
-
+onMounted(() => {
+	window.location.replace("/")
+})
 </script>
 
 <template>
