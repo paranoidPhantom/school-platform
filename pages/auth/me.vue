@@ -39,7 +39,6 @@ onMounted(() => {
 
 <template>
 	<div class="__lk">
-		{{ user }}
 		<ClientOnly>
 			<UCard class="m-8 p-4">
 				<h1 class="text-2xl">Личный кабинет</h1>
