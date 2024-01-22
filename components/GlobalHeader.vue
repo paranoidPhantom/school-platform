@@ -23,7 +23,7 @@ const items = computed(() => {
         [{
             label: "Личный кабинет",
             icon: "i-heroicons-adjustments-vertical-20-solid",
-            href: "/auth/me"
+            href: "/user/me"
         },
     ]);
     retval.push([
