@@ -1,8 +1,13 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient();
 
+
 const homework = useState("homework_global", () => {
     return {};
+});
+
+const homework_arr = useState("homework_global_array", () => {
+    return [];
 });
 
 const { query } = useRoute();
@@ -37,7 +42,6 @@ watchEffect(() => {
 })
 
 router.afterEach(() => (modal.value.open = false));
-const toast = useToast();
 
 onMounted(() => {
     document.documentElement.classList.add("dark");
@@ -51,10 +55,10 @@ const loading = ref(true)
 onMounted(async () => {
     homework.value = {};
     const { data } = await supabase.from("homework").select("*, comments(*)");
+	homework_arr.value = data
     data?.forEach((hw) => {
         const subj = hw.subject;
         if (!homework.value[subj]) homework.value[subj] = [];
-        delete hw.subject;
         homework.value[subj].push(hw);
     });
 });

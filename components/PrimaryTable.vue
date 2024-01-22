@@ -169,7 +169,7 @@ const hasHomework = (index: number, lesson: keyof typeof schedule.subjects) => {
             ? index - currentTime.day
             : 7 - currentTime.day + index;
     Now.setDate(Now.getDate() + diff);
-    const matchString = `${Now.getDate()}/${
+    const matchString = `${Now.getDate() > 8 ? '' : '0'}${Now.getDate()}/${Now.getMonth() > 8 ? '' : '0'}${
         Now.getMonth() + 1
     }/${Now.getFullYear()}`;
     for (let i: number = 0; i < homework.value[lesson]?.length; i++) {

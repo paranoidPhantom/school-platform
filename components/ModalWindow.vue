@@ -117,7 +117,7 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
                             }"
                         >
                             <template #header>
-                                <span class="header" v-for="subject in [subjectData(lesson.subject)]">
+                                <span class="header" v-for="subject in [subjectData(modal.lesson.subject)]">
                                     <Icon
 										class="min-w-4"
                                         :name="subject.icon"
@@ -176,15 +176,6 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
                                             tag="div"
                                             :value="instance.md_text"
                                     /></ContentFormatter>
-                                    <div
-                                        class="attachments"
-                                        v-if="instance.attachments?.length > 0"
-                                    >
-                                        <ContentSlideshow
-                                            :content="instance.attachments"
-                                            prefix="/media/attachments/"
-                                        />
-                                    </div>
 
                                     <div class="dates">
                                         <p class="date">
