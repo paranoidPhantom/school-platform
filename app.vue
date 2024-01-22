@@ -49,7 +49,6 @@ onMounted(() => {
 const loading = ref(true)
 
 onMounted(async () => {
-	loading.value = false
     homework.value = {};
     const { data } = await supabase.from("homework").select("*, comments(*)");
     data?.forEach((hw) => {
@@ -59,14 +58,24 @@ onMounted(async () => {
         homework.value[subj].push(hw);
     });
 });
+
+onMounted(() => {
+	const wait = setInterval(() => {
+		if (loading.value === false) clearInterval(wait)
+		loading.value = false
+	}, 100)
+})
 </script>
 
 <template>
 	<div id="app_container">
 		<ProfileSetup />
-		<div v-if="loading" class="loader">
-			<Icon style="margin: auto; font-size: 4rem; opacity: 0.5;" name="svg-spinners:ring-resize"/>
-		</div>
+		<Transition name="loader">
+			<div v-if="loading" class="loader">
+				<Icon style="font-size: 4rem; opacity: 0.5;" name="svg-spinners:ring-resize"/> 
+				<p style="font-size: 1.5rem; opacity: 0.8;">Доброе утро!</p>
+			</div>
+		</Transition>
 		<Head>
 			<Link
 				rel="apple-touch-icon"
@@ -105,6 +114,10 @@ body {
 
 .loader {
 	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
 	position: fixed;
 	z-index: 103;
 	inset: 0;
@@ -133,6 +146,23 @@ span {
     top: unset;
     padding: 1rem;
     z-index: 2;
+}
+
+
+.loader-enter-from,
+.loader-leave-to {
+    opacity: 0;
+	> p {
+		opacity: 0 !important;
+	}
+}
+
+.loader-enter-active,
+.loader-leave-active {
+    transition: all 0.5s ease-in-out 0.2s;
+	p {
+		transition: all 0.5s;
+	}
 }
 
 .page-enter-from,
