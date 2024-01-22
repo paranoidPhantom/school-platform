@@ -12,6 +12,7 @@ const { params } = useRoute();
 const { subject, id } = params;
 
 const homework = ref();
+const author = ref();
 const route = useRoute();
 
 interface commentFetched {
@@ -37,9 +38,15 @@ const localComments = ref<commentFetched[]>([]);
 const comments = computedAsync<comment[]>(async () => {
     if (homework.value && homework.value.comments) {
         const retval: comment[] = [];
-        const arr = localComments.value.concat(homework.value.comments).sort((a, b) => {
-			return (a.created_at < b.created_at) ? 1 : ((a.created_at > b.created_at) ? -1 : 0);
-		}) as commentFetched[];
+        const arr = localComments.value
+            .concat(homework.value.comments)
+            .sort((a, b) => {
+                return a.created_at < b.created_at
+                    ? 1
+                    : a.created_at > b.created_at
+                    ? -1
+                    : 0;
+            }) as commentFetched[];
         for (let i = 0; i < arr.length; i++) {
             const comment = arr[i];
             const dateObj = new Date(comment.created_at);
@@ -57,7 +64,9 @@ const comments = computedAsync<comment[]>(async () => {
                     Object.keys(data.value).length > 0
                         ? data.value
                         : {
-                              full_name: useRandomNameFromKey(comment.author_id),
+                              full_name: useRandomNameFromKey(
+                                  comment.author_id
+                              ),
                           },
                 time,
                 id: comment.id,
@@ -75,6 +84,13 @@ onMounted(async () => {
         .eq("subject", subject)
         .single();
     homework.value = fetchedHW;
+    if (!fetchedHW) return;
+    const { data: fetchedAuthor } = await useFetch("/api/userDataFromID", {
+        query: {
+            UID: fetchedHW.author,
+        },
+    });
+    author.value = fetchedAuthor.value;
 });
 
 const normalizeDate = (date: string | undefined) => {
@@ -93,24 +109,25 @@ const commentState = reactive({
 
 const validate = (state: any): FormError[] => {
     const errors = [];
-    if (!state.input) errors.push({ path: "input", message: "Обязательное поле" })
+    if (!state.input)
+        errors.push({ path: "input", message: "Обязательное поле" });
     return errors;
 };
 
 const onSubmit = async (event: FormSubmitEvent<any>) => {
-	if (!user.value) return
-	const content = event.data.input
-	const created_at = new Date().toISOString()
-	const pushObject = {
-		content,
+    if (!user.value) return;
+    const content = event.data.input;
+    const created_at = new Date().toISOString();
+    const pushObject = {
+        content,
         author_id: user.value.id,
         descendant_of: homework.value.id,
         created_at,
-	}
-	const { error } = await supabase.from("comments").insert(pushObject as any)
-	commentState.input = ""
-	if (error) commentState.input = content
-	else localComments.value.push(pushObject as commentFetched)
+    };
+    const { error } = await supabase.from("comments").insert(pushObject as any);
+    commentState.input = "";
+    if (error) commentState.input = content;
+    else localComments.value.push(pushObject as commentFetched);
 };
 </script>
 
@@ -145,6 +162,20 @@ const onSubmit = async (event: FormSubmitEvent<any>) => {
                         Нужно сдать: {{ normalizeDate(homework.date_due) }}
                     </p>
                 </div>
+                <NuxtLink
+                    v-if="author"
+                    :to="`/user/${homework.author}`"
+                    class="author"
+                >
+                    <p class="text-xl flex items-center gap-4">
+                        <UAvatar
+                            :src="author.avatar_url"
+                            :alt="author.full_name"
+                            size="sm"
+                        />
+                        {{ author.full_name }}
+                    </p>
+                </NuxtLink>
             </template>
             <Icon
                 style="margin: auto; font-size: 4rem; opacity: 0.5"
@@ -203,7 +234,7 @@ const onSubmit = async (event: FormSubmitEvent<any>) => {
             <UAlert
                 class="w-10/12"
                 v-for="comment in comments"
-				:ui="{ avatar: { base: 'object-cover' } }"
+                :ui="{ avatar: { base: 'object-cover' } }"
                 :avatar="{
                     src: comment.author.avatar_url,
                     alt: comment.author.full_name,
@@ -236,6 +267,15 @@ main {
 
         p {
             opacity: 0.7;
+        }
+    }
+    .author {
+        width: fit-content;
+        padding: 0.5rem;
+        border-radius: 1rem;
+		transition: all 0.3s ease-in-out;
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
     }
 }

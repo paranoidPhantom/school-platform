@@ -110,6 +110,10 @@ body {
     font-optical-sizing: auto;
 }
 
+.app_container {
+	overflow-x: hidden;
+}
+
 .object-cover {
 	* {
 		object-fit: cover;
@@ -180,6 +184,5 @@ span {
     transition: all 0.3s;
     position: absolute;
     width: 100%;
-    height: 100%;
 }
 </style>

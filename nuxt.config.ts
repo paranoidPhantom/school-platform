@@ -56,7 +56,7 @@ export default defineNuxtConfig({
 		workbox: {
 			navigateFallback: "/",
 			globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-			navigateFallbackDenylist: [/^\/homework/, /^\/auth/, /^\/callback/, /^\//]
+			navigateFallbackDenylist: [/^\/homework/, /^\/auth/, /^\/callback/, /^\//, /^\/user/]
 		},
 		devOptions: {
 			enabled: true,

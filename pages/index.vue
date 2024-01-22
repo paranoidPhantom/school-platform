@@ -82,6 +82,7 @@ const normalizeDate = (date: string | undefined) => {
                 </div>
                 <div class="list">
                     <h4 class="text-2xl text-center">Домашнее задание</h4>
+					<Icon v-if="!homework || homework.length === 0" style="margin: 1rem 45%; font-size: 2rem; opacity: 0.5;" name="svg-spinners:ring-resize"/> 
                     <UCard
                         :to="`/homework/${assignment.subject}/${assignment.id}`"
                         v-for="assignment in homework"
