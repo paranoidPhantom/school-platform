@@ -108,7 +108,7 @@ const normalizeDate = (date: string | undefined) => {
 
                         <NuxtLink
                             class="details"
-                            :to="`/homework/${homework.subject}/${assignment.id}`"
+                            :to="`/homework/${assignment.subject}/${assignment.id}`"
                         >
                             <UButton
                                 variant="link"
