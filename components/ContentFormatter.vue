@@ -8,10 +8,15 @@
 
 <style lang="scss">
 .__formatter {
-    li {
-        list-style: disc;
-        margin-left: 2rem;
+	ul li {
+		list-style: disc;
     }
+	ol li {
+		list-style: decimal;
+    }
+	li {
+		margin-left: 2rem;
+	}
     h1 {
         font-size: xx-large;
         font-weight: 700;
