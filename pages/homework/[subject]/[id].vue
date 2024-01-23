@@ -136,7 +136,7 @@ useHead({
         {
             hid: "description",
             name: "description",
-            content: ast.value.data.description,
+            content: ast.value.data.description || ast.value.data.title,
         },
         {
             hid: "og:title",
@@ -146,9 +146,12 @@ useHead({
         {
             hid: "og:description",
             property: "og:description",
-            content: ast.value.data.description,
+            content: ast.value.data.description || ast.value.data.title,
         },
     ],
+	htmlAttrs: {
+		lang: 'ru'
+	},
 });
 </script>
 

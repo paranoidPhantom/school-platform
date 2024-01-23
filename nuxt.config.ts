@@ -7,6 +7,7 @@ export default defineNuxtConfig({
 			mode: "out-in"
 		}
 	},
+	devtools: true,
 	supabase: {
 		redirect: false,
 	},
