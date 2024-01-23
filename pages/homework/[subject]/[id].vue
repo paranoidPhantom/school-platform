@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { FormError, FormSubmitEvent } from "#ui/types";
+import { parseMarkdown } from "@nuxtjs/mdc/runtime";
 import { computedAsync } from "@vueuse/core";
-definePageMeta({
-    title: "Задание",
-});
 
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
@@ -76,22 +74,20 @@ const comments = computedAsync<comment[]>(async () => {
     }
 }, null);
 
-onMounted(async () => {
-    const { data: fetchedHW } = await supabase
-        .from("homework")
-        .select("*, comments(*)")
-        .eq("id", id)
-        .eq("subject", subject)
-        .single();
-    homework.value = fetchedHW;
-    if (!fetchedHW) return;
-    const { data: fetchedAuthor } = await useFetch("/api/userDataFromID", {
-        query: {
-            UID: fetchedHW.author,
-        },
-    });
-    author.value = fetchedAuthor.value;
+const { data: fetchedHW } = await supabase
+    .from("homework")
+    .select("*, comments(*)")
+    .eq("id", id)
+    .eq("subject", subject)
+    .single();
+homework.value = fetchedHW;
+
+const { data: fetchedAuthor } = await useFetch("/api/userDataFromID", {
+    query: {
+        UID: fetchedHW.author,
+    },
 });
+author.value = fetchedAuthor.value;
 
 const normalizeDate = (date: string | undefined) => {
     if (!date) {
@@ -129,6 +125,31 @@ const onSubmit = async (event: FormSubmitEvent<any>) => {
     if (error) commentState.input = content;
     else localComments.value.push(pushObject as commentFetched);
 };
+
+const { data: ast } = (await useAsyncData("markdown", () =>
+    parseMarkdown(homework.value.md_text)
+)) as { data: any };
+
+useHead({
+    title: `${ast.value.data.title}`,
+    meta: [
+        {
+            hid: "description",
+            name: "description",
+            content: ast.value.data.description,
+        },
+        {
+            hid: "og:title",
+            property: "og:title",
+            content: ast.value.data.title,
+        },
+        {
+            hid: "og:description",
+            property: "og:description",
+            content: ast.value.data.description,
+        },
+    ],
+});
 </script>
 
 <template>
@@ -273,7 +294,7 @@ main {
         width: fit-content;
         padding: 0.5rem;
         border-radius: 1rem;
-		transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
         &:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
