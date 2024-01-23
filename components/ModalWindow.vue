@@ -2,8 +2,23 @@
 import type { teacher, location, lesson, subject } from "../types/db";
 const { schedule } = useAppConfig();
 
-const homework = useState("homework_global", () => {
+const _homework = useState("homework_global", () => {
     return {};
+});
+
+const homework = computed(() => {
+    let retval = {};
+    const Keys = Object.keys(_homework.value);
+    Keys.forEach((key) => {
+        retval[key] = _homework.value[key].sort((a, b) => {
+            return a.created_at < b.created_at
+                ? 1
+                : a.created_at > b.created_at
+                ? -1
+                : 0;
+        });
+    });
+	return retval;
 });
 
 const modal = useState<{
@@ -117,12 +132,19 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
                             }"
                         >
                             <template #header>
-                                <span class="header" v-for="subject in [subjectData(modal.lesson.subject)]">
+                                <span
+                                    class="header"
+                                    v-for="subject in [
+                                        subjectData(modal.lesson.subject),
+                                    ]"
+                                >
                                     <Icon
-										class="min-w-4"
+                                        class="min-w-4"
                                         :name="subject.icon"
                                     />
-									<span class="truncate max-w-full !block">{{ subject.full }}</span>
+                                    <span class="truncate max-w-full !block">{{
+                                        subject.full
+                                    }}</span>
                                     <button
                                         class="close"
                                         @click="modal.open = false"
@@ -195,9 +217,13 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
                                         :to="`/homework/${modal.lesson.subject}/${instance.id}`"
                                     >
                                         <UButton
-											variant="link"
-											trailing-icon="i-heroicons-arrow-right"
-                                            :label="instance.comments.length > 0 ? `Комментарии - ${instance.comments.length}` : `Оставить комментарий`"
+                                            variant="link"
+                                            trailing-icon="i-heroicons-arrow-right"
+                                            :label="
+                                                instance.comments.length > 0
+                                                    ? `Комментарии - ${instance.comments.length}`
+                                                    : `Оставить комментарий`
+                                            "
                                         />
                                     </NuxtLink>
                                 </div>
