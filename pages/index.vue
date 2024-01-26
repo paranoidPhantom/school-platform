@@ -64,6 +64,15 @@ const normalizeDate = (date: string | undefined) => {
     <main class="__home-page">
         <PrimaryTable />
 		<hr class="mx-10 opacity-20">
+		<UCard class="card">
+			<h1 class="text-3xl my-2">На этих выходных:</h1>
+			<ul style="list-style: disc;" class="opacity-80">
+				<li class="ml-8">Фильрация домашнего задание</li>
+				<li class="ml-8">Исправление фактических ошибок в расписании</li>
+				<li class="ml-8">Адекватное поведение предметов Р.К. (перестоновка в любом порядке)</li>
+				<li class="ml-8">Улучшение окна загрузки дз (автозополнение дат)</li>
+			</ul>
+		</UCard>
         <UCard class="card">
             <div class="content">
                 <div class="filters">
