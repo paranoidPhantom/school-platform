@@ -163,8 +163,8 @@ export default defineAppConfig({
                 icon: "icon-park-outline:english",
             },
             hist: {
-                full: "Всеобщая История",
-                short: "Вс. История",
+                full: "История России",
+                short: "История",
                 icon: "material-symbols:history-toggle-off-rounded",
             },
             inf: {

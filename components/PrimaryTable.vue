@@ -169,9 +169,9 @@ const hasHomework = (index: number, lesson: keyof typeof schedule.subjects) => {
             ? index - currentTime.day
             : 7 - currentTime.day + index;
     Now.setDate(Now.getDate() + diff);
-    const matchString = `${Now.getDate() > 8 ? '' : '0'}${Now.getDate()}/${Now.getMonth() > 8 ? '' : '0'}${
-        Now.getMonth() + 1
-    }/${Now.getFullYear()}`;
+    const matchString = `${Now.getDate() > 8 ? "" : "0"}${Now.getDate()}/${
+        Now.getMonth() > 8 ? "" : "0"
+    }${Now.getMonth() + 1}/${Now.getFullYear()}`;
     for (let i: number = 0; i < homework.value[lesson]?.length; i++) {
         const instance = homework.value[lesson][i];
         if (instance.date_due === matchString) {
@@ -182,32 +182,40 @@ const hasHomework = (index: number, lesson: keyof typeof schedule.subjects) => {
 };
 
 const defIndexFlicker = new Date().getDay() - 1;
+
+const timeAndIndexSetting = ref(false);
+const timeAndIndexShown = computed(() => timeAndIndexSetting.value && ListMode.value);
 </script>
 
 <template>
-    <section class="large-table">
-        <template v-if="!ListMode">
-            <div class="index">
-                <div class="card" style="opacity: 0">
-                    <span>#</span>
-                    <span class="dummy">#</span>
-                </div>
-                <div class="card" v-for="index in schedule.times.length">
-                    <span>{{ index }}</span>
-                    <span class="dummy">{{ index }}</span>
-                </div>
+    <section class="large-table" :class="{ shifted: timeAndIndexShown }">
+		<div class="overlay" v-if="timeAndIndexShown"></div>
+        <div
+            class="index"
+            :class="{ lmode: ListMode, frozen: timeAndIndexShown }"
+        >
+            <div class="card" style="opacity: 0">
+                <span>#</span>
+                <span class="dummy">#</span>
             </div>
-            <div class="time">
-                <div class="card">
-                    <span>Время</span>
-                    <span class="dummy">Время</span>
-                </div>
-                <div class="card" v-for="time in schedule.times">
-                    <span>{{ time.start }} - {{ time.end }}</span>
-                    <span class="dummy">{{ time.start }} - {{ time.end }}</span>
-                </div>
+            <div class="card" v-for="index in schedule.times.length">
+                <span>{{ index }}</span>
+                <span class="dummy">{{ index }}</span>
             </div>
-        </template>
+        </div>
+        <div
+            class="time"
+            :class="{ lmode: ListMode, frozen: timeAndIndexShown }"
+        >
+            <div class="card">
+                <span>Время</span>
+                <span class="dummy">Время</span>
+            </div>
+            <div class="card" v-for="time in schedule.times">
+                <span>{{ time.start }} - {{ time.end }}</span>
+                <span class="dummy">{{ time.start }} - {{ time.end }}</span>
+            </div>
+        </div>
         <Flicking
             :plugins="ListMode ? flicking_plugins : disabled_plugins"
             :options="{
@@ -269,10 +277,20 @@ const defIndexFlicker = new Date().getDay() - 1;
             </div>
         </Flicking>
     </section>
+    <div class="flex my-4 px-4 gap-4">
+        <UButton v-if="ListMode" variant="link" @click="timeAndIndexSetting = !timeAndIndexSetting">
+            <UBadge class="flex gap-2" size="lg" variant="subtle"
+                ><Icon name="ic:twotone-schedule" />{{
+                    timeAndIndexSetting
+						? "Показывать только уроки"
+                        : "Показывать время и номер урока"
+                }}</UBadge
+            >
+        </UButton>
+    </div>
 </template>
 
 <style lang="scss">
-
 .large-table {
     span.icon {
         display: none;
@@ -294,14 +312,45 @@ const defIndexFlicker = new Date().getDay() - 1;
 
     transition: all 0.3s;
 
+	.overlay {
+		pointer-events: none;
+		position: absolute;
+		inset: -2px;
+		z-index: 2;
+	}
+
+	&.shifted {
+		width: calc(60vw - 4px);
+		translate: 40vw;
+		.overlay {
+			box-shadow: 0 0 3rem 3rem rgb(10, 10, 10) inset;
+		}
+	}
+
     .index {
         width: var(--index-width) !important;
+        &.lmode {
+            position: absolute;
+            z-index: 3;
+            right: calc(100% + 10rem);
+            &.frozen {
+                right: calc(100% + 40vw - var(--index-width) - 1rem);
+            }
+        }
     }
 
     > .time {
         width: fit-content !important;
         > .card {
             width: unset;
+        }
+        &.lmode {
+            position: absolute;
+            z-index: 3;
+            right: calc(100% + 10rem);
+            &.frozen {
+                right: calc(100% + 40vw - 12rem);
+            }
         }
     }
 

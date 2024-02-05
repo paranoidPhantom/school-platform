@@ -7,15 +7,26 @@ definePageMeta({
 const {
     schedule: { subjects: _subjects },
 } = useAppConfig();
+
+let today: string | Date = new Date()
+today = `${today.getDate() > 9 ? '' : '0'}${today.getDate()}/${today.getMonth() > 9 ? '' : '0'}${today.getMonth()}/${today.getFullYear()}`
+
+let tomorrow: string | Date = new Date()
+tomorrow.setDate(tomorrow.getDate() + 1)
+tomorrow = `${tomorrow.getDate() > 9 ? '' : '0'}${tomorrow.getDate()}/${tomorrow.getMonth() > 9 ? '' : '0'}${tomorrow.getMonth()}/${tomorrow.getFullYear()}`
+
+
 const state = reactive({
     input: "# Тут можно писать на языке Markdown!\n---\n\nБольше о форматировании на этом замечательном языке вы можете прочитать [по ссылке](https://skillbox.ru/media/code/yazyk-razmetki-markdown-shpargalka-po-sintaksisu-s-primerami/)",
     subject: undefined,
-    date: "",
-    date_due: "",
+    date: today,
+    date_due: tomorrow,
 });
 
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
+
+const router = useRouter();
 
 const subjects = computed(() => {
     const keys = Object.keys(_subjects);
@@ -59,7 +70,16 @@ const onSubmit = async (event: FormSubmitEvent<any>) => {
             timeout: 5000,
 			color: "red"
 		})
-	} else window.location.replace("/")
+	} else {
+		router.push("/")
+		toast.add({
+			title: "Домашнее задание создано",
+            description: "Оно появится как будет одобрено модератором",
+            timeout: 10000,
+            color: "green",
+			icon: "i-heroicons-check-badge-20-solid"
+		})
+	}
 }
 </script>
 
