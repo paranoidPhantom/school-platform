@@ -2,8 +2,8 @@
 const {
     schedule: { subjects: _subjects },
 } = useAppConfig();
-const _homework = useState("homework_global_array", () => {
-    return [];
+const _homework = useState<null | []>("homework_global_array", () => {
+    return null;
 });
 
 const defaultSubject = {
@@ -11,11 +11,14 @@ const defaultSubject = {
     label: "Любой",
     icon: "ic:outline-minus",
 };
+
 const filter_state = reactive({
     subject: defaultSubject,
+    date: undefined,
 });
 
 const homework = computed(() => {
+    if (_homework === null) return null;
     return _homework.value
         .sort((a, b) => {
             return a.created_at < b.created_at
@@ -27,6 +30,11 @@ const homework = computed(() => {
         .filter((assignment) => {
             if (filter_state.subject.id) {
                 if (assignment.subject !== filter_state.subject.id) {
+                    return false;
+                }
+            }
+            if (filter_state.date) {
+                if (!assignment.date_due.startsWith(filter_state.date)) {
                     return false;
                 }
             }
@@ -58,21 +66,15 @@ const normalizeDate = (date: string | undefined) => {
     return `${d.length < 2 ? "0" + d : d}.${m.length < 2 ? "0" + m : m}`;
 };
 
+let tomorrow: string | Date = new Date()
+tomorrow.setDate(tomorrow.getDate() + 1)
+tomorrow = `${tomorrow.getDate() > 9 ? '' : '0'}${tomorrow.getDate()}/${tomorrow.getMonth() > 9 ? '' : '0'}${tomorrow.getMonth()}/${tomorrow.getFullYear()}`
 </script>
 
 <template>
     <main class="__home-page">
         <PrimaryTable />
-		<hr class="mx-10 opacity-20">
-		<UCard class="card">
-			<h1 class="text-3xl my-2"><u>Не совсем</u> на этих выходных:</h1>
-			<ul style="list-style: disc;" class="opacity-80">
-				<li class="ml-8">Фильрация домашнего задание</li>
-				<li class="ml-8">Исправление фактических ошибок в расписании</li>
-				<li class="ml-8">Адекватное поведение предметов Р.К. (перестоновка в любом порядке)</li>
-				<li class="ml-8">Улучшение окна загрузки дз (автозополнение дат)</li>
-			</ul>
-		</UCard>
+        <hr class="mx-10 opacity-20" />
         <UCard class="card">
             <div class="content">
                 <div class="filters">
@@ -88,22 +90,50 @@ const normalizeDate = (date: string | undefined) => {
                             </template>
                         </UInputMenu>
                     </UFormGroup>
+					<hr class="opacity-10">
+                    <UFormGroup label="Дата (сдачи)" name="date_due" hint="Формат ДД/ММ/ГГГГ">
+                        <UInput v-model="filter_state.date" placeholder="Любая" />
+						<div class="flex gap-2 my-2">
+							<UButton variant="soft" @click="filter_state.date = ''">Любая</UButton>
+							<UButton variant="soft" @click="filter_state.date = tomorrow">Завтра</UButton>
+						</div>
+                    </UFormGroup>
                 </div>
                 <div class="list">
                     <h4 class="text-2xl text-center">Домашнее задание</h4>
-					<Icon v-if="!homework || homework.length === 0" style="margin: 1rem 45%; font-size: 2rem; opacity: 0.5;" name="svg-spinners:ring-resize"/> 
+                    <Icon
+                        v-if="!homework"
+                        style="margin: 1rem 45%; font-size: 2rem; opacity: 0.5"
+                        name="svg-spinners:ring-resize"
+                    />
+                    <template v-else-if="homework.length === 0">
+                        <Icon
+                            style="
+                                margin: 1rem 45%;
+                                font-size: 2rem;
+                                opacity: 0.5;
+                            "
+                            name="bi:database-x"
+                        />
+                        <p class="text-center">Ничего не найдено...</p>
+                    </template>
                     <UCard
                         :to="`/homework/${assignment.subject}/${assignment.id}`"
                         v-for="assignment in homework"
-						class="my-12"
+                        class="my-12"
                     >
-						<h2 class="text-2xl"><Icon :name="_subjects[assignment.subject].icon" class="mr-4" />{{ _subjects[assignment.subject].full }}</h2>
-						<hr class="opacity-15 my-4">
+                        <h2 class="text-2xl">
+                            <Icon
+                                :name="_subjects[assignment.subject].icon"
+                                class="mr-4"
+                            />{{ _subjects[assignment.subject].full }}
+                        </h2>
+                        <hr class="opacity-15 my-4" />
                         <ContentFormatter class="primary opacity-50"
-						><MDC tag="div" :value="assignment.md_text"
+                            ><MDC tag="div" :value="assignment.md_text"
                         /></ContentFormatter>
-						<hr class="opacity-15 my-4">
-						
+                        <hr class="opacity-15 my-4" />
+
                         <div class="flex justify-between my-4">
                             <p class="date">
                                 {{ assignment.date ? `Задано:` : `` }}
