@@ -16,10 +16,17 @@ const {
 } = useAppConfig();
 
 
+const supabase = useSupabaseClient()
+const { data: { session: { access_token } } } = await supabase.auth.getSession()
+
 const homework = ref([])
 
 const refreshHW = async () => {
-	const { data, error } = await useFetch("/api/allHomework")
+	const { data } = await useFetch("/api/allHomework", {
+		headers: {
+			access_token: access_token
+		}
+	})
 	homework.value = data.value
         .sort((a, b) => {
             return a.created_at < b.created_at
@@ -49,7 +56,10 @@ const approveID = async (ID: number) => {
 			ID,
 			action: "approve",
 		},
-		method: "POST"
+		method: "POST",
+		headers: {
+			access_token: access_token
+		}
 	})
 	refreshHW()
 }
@@ -60,12 +70,18 @@ const deleteID = async (ID: number) => {
 			ID,
 			action: "delete",
 		},
-		method: "POST"
+		method: "POST",
+		headers: {
+			access_token: access_token
+		}
 	})
 	refreshHW()
 }
 
-refreshHW()
+
+onMounted(() => {
+	setTimeout(refreshHW, 1);
+})
 </script>
 
 <template>
