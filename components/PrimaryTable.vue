@@ -13,7 +13,12 @@ const disabled_plugins = [new Perspective({ rotate: 0, scale: 0 })];
 const { width } = useWindowSize();
 const { schedule } = useAppConfig();
 
-const ListMode = computed(() => width.value <= 600);
+
+const ListMode = ref(false);
+
+const refreshListMode = () => {
+	ListMode.value = width.value <= 600
+}
 
 const homework = useState("homework_global", () => {
     return {};
@@ -149,9 +154,11 @@ onMounted(() => {
 onUnmounted(() => {
     removeLaggyEffect();
     if (timeCheck) {
-        clearInterval(timeCheck);
+		clearInterval(timeCheck);
     }
 });
+
+watch(width, refreshListMode)
 
 watch(ListMode, () => {
     if (ListMode.value) removeLaggyEffect();
@@ -184,11 +191,17 @@ const hasHomework = (index: number, lesson: keyof typeof schedule.subjects) => {
 const defIndexFlicker = new Date().getDay() - 1;
 
 const timeAndIndexSetting = ref(false);
-const timeAndIndexShown = computed(() => timeAndIndexSetting.value && ListMode.value);
+const timeAndIndexShown = ref(false);
+
+watchEffect(() => {
+	timeAndIndexShown.value = timeAndIndexSetting.value && ListMode.value
+})
+
+onMounted(refreshListMode)
 </script>
 
 <template>
-    <section class="large-table" :class="{ shifted: timeAndIndexShown }">
+	<section class="large-table" :class="{ shifted: timeAndIndexShown }">
 		<div class="overlay" v-if="timeAndIndexShown"></div>
         <div
             class="index"
