@@ -13,12 +13,11 @@ const disabled_plugins = [new Perspective({ rotate: 0, scale: 0 })];
 const { width } = useWindowSize();
 const { schedule } = useAppConfig();
 
-
 const ListMode = ref(false);
 
 const refreshListMode = () => {
-	ListMode.value = width.value <= 600
-}
+    ListMode.value = width.value <= 600;
+};
 
 const homework = useState("homework_global", () => {
     return {};
@@ -154,11 +153,11 @@ onMounted(() => {
 onUnmounted(() => {
     removeLaggyEffect();
     if (timeCheck) {
-		clearInterval(timeCheck);
+        clearInterval(timeCheck);
     }
 });
 
-watch(width, refreshListMode)
+watch(width, refreshListMode);
 
 watch(ListMode, () => {
     if (ListMode.value) removeLaggyEffect();
@@ -194,15 +193,15 @@ const timeAndIndexSetting = ref(false);
 const timeAndIndexShown = ref(false);
 
 watchEffect(() => {
-	timeAndIndexShown.value = timeAndIndexSetting.value && ListMode.value
-})
+    timeAndIndexShown.value = timeAndIndexSetting.value && ListMode.value;
+});
 
-onMounted(refreshListMode)
+onMounted(refreshListMode);
 </script>
 
 <template>
-	<section class="large-table" :class="{ shifted: timeAndIndexShown }">
-		<div class="overlay" v-if="timeAndIndexShown"></div>
+    <section class="large-table" :class="{ shifted: timeAndIndexShown }">
+        <div class="overlay" v-if="timeAndIndexShown"></div>
         <div
             class="index"
             :class="{ lmode: ListMode, frozen: timeAndIndexShown }"
@@ -291,11 +290,15 @@ onMounted(refreshListMode)
         </Flicking>
     </section>
     <div class="flex my-4 px-4 gap-4">
-        <UButton v-if="ListMode" variant="link" @click="timeAndIndexSetting = !timeAndIndexSetting">
+        <UButton
+            v-if="ListMode"
+            variant="link"
+            @click="timeAndIndexSetting = !timeAndIndexSetting"
+        >
             <UBadge class="flex gap-2" size="lg" variant="subtle"
                 ><Icon name="ic:twotone-schedule" />{{
                     timeAndIndexSetting
-						? "Показывать только уроки"
+                        ? "Показывать только уроки"
                         : "Показывать время и номер урока"
                 }}</UBadge
             >
@@ -312,10 +315,9 @@ onMounted(refreshListMode)
     --index-width: 2rem;
     --gap-size: 0.5rem;
 
-    --color: 0, 0, 239;
+    --color: 106, 255, 0;
     --warning-color: 0, 0, 0;
-    --blue-color: 0, 102, 255;
-    --red-color: 255, 0, 0;
+    --red-color: 255, 255, 0;
     // Positioning and sizing of main container
     margin: 1rem 5%;
     width: 90%;
@@ -325,20 +327,20 @@ onMounted(refreshListMode)
 
     transition: all 0.3s;
 
-	.overlay {
-		pointer-events: none;
-		position: absolute;
-		inset: -2px;
-		z-index: 2;
-	}
+    .overlay {
+        pointer-events: none;
+        position: absolute;
+        inset: -2px;
+        z-index: 2;
+    }
 
-	&.shifted {
-		width: calc(60vw - 4px);
-		translate: 40vw;
-		.overlay {
-			box-shadow: 0 0 3rem 3rem rgb(10, 10, 10) inset;
-		}
-	}
+    &.shifted {
+        width: calc(60vw - 4px);
+        translate: 40vw;
+        .overlay {
+            box-shadow: 0 0 3rem 3rem rgb(10, 10, 10) inset;
+        }
+    }
 
     .index {
         width: var(--index-width) !important;
@@ -431,7 +433,7 @@ onMounted(refreshListMode)
 
             &.current {
                 overflow: hidden;
-                --color: 0, 102, 255;
+                --color: 106, 255, 0;
             }
 
             @keyframes rotate {
@@ -459,7 +461,7 @@ onMounted(refreshListMode)
             }
 
             &.current.idle {
-                --color: 255, 0, 0;
+                --color: var(--red-color);
             }
 
             &.current.idle::before {

@@ -1,14 +1,14 @@
 type teacher =
-	| keyof typeof schedule.teachers
-	| (keyof typeof schedule.teachers)[];
+    | keyof typeof schedule.teachers
+    | (keyof typeof schedule.teachers)[];
 type location =
-	| keyof typeof schedule.locations
-	| (keyof typeof schedule.locations)[];
+    | keyof typeof schedule.locations
+    | (keyof typeof schedule.locations)[];
 
 interface lesson {
-	subject: keyof typeof schedule.subjects;
-	teacher: teacher;
-	location: location;
+    subject: keyof typeof schedule.subjects;
+    teacher: teacher;
+    location: location;
 }
 interface subject {
     full: string;
@@ -16,4 +16,4 @@ interface subject {
     icon: string;
 }
 
-export { teacher, location, lesson, subject }
+export { teacher, location, lesson, subject };

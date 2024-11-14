@@ -11,17 +11,16 @@ const homework_arr = useState("homework_global_array", () => {
     return [];
 });
 
-
 const { query } = useRoute();
 
 const route = useRoute();
 const router = useRouter();
 
 defineShortcuts({
-	shift_a: () => {
-		router.push("/homework/moderate")
-	}
-})
+    shift_a: () => {
+        router.push("/homework/moderate");
+    },
+});
 
 const modal = useState<{
     open: boolean;
@@ -66,9 +65,9 @@ const recalculateHW = () => {
         if (!homework.value[subj]) homework.value[subj] = [];
         homework.value[subj].push(hw);
     });
-}
+};
 
-watch(homework_arr, recalculateHW)
+watch(homework_arr, recalculateHW);
 
 onMounted(async () => {
     const wait = setInterval(() => {
@@ -77,10 +76,9 @@ onMounted(async () => {
     }, 100);
 
     homework.value = {};
-    const { data } = await supabase.from("homework").select("*, comments(*)");
+    const { data } = await supabase.from("homework").select("*");
     homework_arr.value = data;
 });
-
 
 const handle_postgres_changes = (
     payload: RealtimePostgresChangesPayload<{ [key: string]: any }>
@@ -88,25 +86,21 @@ const handle_postgres_changes = (
     const hw = payload.eventType !== "DELETE" ? payload.new : payload.old;
     switch (payload.eventType) {
         case "INSERT":
-			homework_arr.value.push(hw)
+            homework_arr.value.push(hw);
             break;
         case "UPDATE":
-            homework_arr.value.forEach(
-                (hw_checking, index: number) => {
-                    if (hw_checking.id === hw.id) {
-						homework_arr.value[index] = hw
-                    }
+            homework_arr.value.forEach((hw_checking, index: number) => {
+                if (hw_checking.id === hw.id) {
+                    homework_arr.value[index] = hw;
                 }
-            );
+            });
             break;
         case "DELETE":
-            homework_arr.value.forEach(
-                (hw_checking, index: number) => {
-                    if (hw.id === hw_checking.id) {
-						homework_arr.value.splice(index, 1)
-                    }
+            homework_arr.value.forEach((hw_checking, index: number) => {
+                if (hw.id === hw_checking.id) {
+                    homework_arr.value.splice(index, 1);
                 }
-            );
+            });
             break;
     }
 };
@@ -153,7 +147,8 @@ const listener = supabase
 @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap");
 
-html, body {
+html,
+body {
     max-width: 100vw;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -162,7 +157,6 @@ html, body {
 
 body {
     margin: 0;
-    background-color: rgb(10, 10, 10);
     opacity: 1;
     background-position: center;
     background-size: 20px 20px;
