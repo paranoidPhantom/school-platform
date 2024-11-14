@@ -1,16 +1,16 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "dev",
-			"problemMatcher": [],
-			"label": "npm: dev",
-			"detail": "nuxt dev",
-			"group": {
-				"kind": "test",
-				"isDefault": true
-			}
-		}
-	]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "command": "nuxt dev --port 3002 --host",
+            "problemMatcher": [],
+            "label": "bun: dev",
+            "detail": "nuxt dev --port 3002 --host",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
 }
