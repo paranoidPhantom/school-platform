@@ -2,21 +2,21 @@
 
 <template>
     <div class="__formatter">
-		<slot />
+        <slot />
     </div>
 </template>
 
 <style lang="scss">
 .__formatter {
-	ul li {
-		list-style: disc;
+    ul li {
+        list-style: disc;
     }
-	ol li {
-		list-style: decimal;
+    ol li {
+        list-style: decimal;
     }
-	li {
-		margin-left: 2rem;
-	}
+    li {
+        margin-left: 2rem;
+    }
     h1 {
         font-size: xx-large;
         font-weight: 700;
@@ -34,7 +34,7 @@
 
     hr {
         opacity: 0.15;
-		margin: 1rem 0;
+        margin: 1rem 0;
     }
 
     a {
