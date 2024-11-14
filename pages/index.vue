@@ -66,9 +66,11 @@ const normalizeDate = (date: string | undefined) => {
     return `${d.length < 2 ? "0" + d : d}.${m.length < 2 ? "0" + m : m}`;
 };
 
-let tomorrow: string | Date = new Date()
-tomorrow.setDate(tomorrow.getDate() + 1)
-tomorrow = `${tomorrow.getDate() > 9 ? '' : '0'}${tomorrow.getDate()}/${tomorrow.getMonth() > 9 ? '' : '0'}${tomorrow.getMonth()}/${tomorrow.getFullYear()}`
+let tomorrow: string | Date = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+tomorrow = `${tomorrow.getDate() > 9 ? "" : "0"}${tomorrow.getDate()}/${
+    tomorrow.getMonth() > 9 ? "" : "0"
+}${tomorrow.getMonth()}/${tomorrow.getFullYear()}`;
 </script>
 
 <template>
@@ -90,13 +92,28 @@ tomorrow = `${tomorrow.getDate() > 9 ? '' : '0'}${tomorrow.getDate()}/${tomorrow
                             </template>
                         </UInputMenu>
                     </UFormGroup>
-					<hr class="opacity-10">
-                    <UFormGroup label="Дата (сдачи)" name="date_due" hint="Формат ДД/ММ/ГГГГ">
-                        <UInput v-model="filter_state.date" placeholder="Любая" />
-						<div class="flex gap-2 my-2">
-							<UButton variant="soft" @click="filter_state.date = ''">Любая</UButton>
-							<UButton variant="soft" @click="filter_state.date = tomorrow">Завтра</UButton>
-						</div>
+                    <hr class="opacity-10" />
+                    <UFormGroup
+                        label="Дата (сдачи)"
+                        name="date_due"
+                        hint="Формат ДД/ММ/ГГГГ"
+                    >
+                        <UInput
+                            v-model="filter_state.date"
+                            placeholder="Любая"
+                        />
+                        <div class="flex gap-2 my-2">
+                            <UButton
+                                variant="soft"
+                                @click="filter_state.date = ''"
+                                >Любая</UButton
+                            >
+                            <UButton
+                                variant="soft"
+                                @click="filter_state.date = tomorrow"
+                                >Завтра</UButton
+                            >
+                        </div>
                     </UFormGroup>
                 </div>
                 <div class="list">
@@ -117,17 +134,16 @@ tomorrow = `${tomorrow.getDate() > 9 ? '' : '0'}${tomorrow.getDate()}/${tomorrow
                         />
                         <p class="text-center">Ничего не найдено...</p>
                     </template>
-                    <UCard
-                        :to="`/homework/${assignment.subject}/${assignment.id}`"
-                        v-for="assignment in homework"
-                        class="my-12"
-                    >
-                        <h2 class="text-2xl">
+                    <UCard v-for="assignment in homework" class="my-12">
+                        <NuxtLink
+                            class="text-2xl"
+                            :to="`/homework/${assignment.subject}/${assignment.id}`"
+                        >
                             <Icon
                                 :name="_subjects[assignment.subject].icon"
                                 class="mr-4"
                             />{{ _subjects[assignment.subject].full }}
-                        </h2>
+                        </NuxtLink>
                         <hr class="opacity-15 my-4" />
                         <ContentFormatter class="primary opacity-50"
                             ><MDC tag="div" :value="assignment.md_text"
@@ -144,21 +160,6 @@ tomorrow = `${tomorrow.getDate() > 9 ? '' : '0'}${tomorrow.getDate()}/${tomorrow
                                 {{ normalizeDate(assignment.date_due) }}
                             </p>
                         </div>
-
-                        <NuxtLink
-                            class="details"
-                            :to="`/homework/${assignment.subject}/${assignment.id}`"
-                        >
-                            <UButton
-                                variant="link"
-                                trailing-icon="i-heroicons-arrow-right"
-                                :label="
-                                    assignment.comments.length > 0
-                                        ? `Комментарии - ${assignment.comments.length}`
-                                        : `Оставить комментарий`
-                                "
-                            />
-                        </NuxtLink>
                     </UCard>
                 </div>
             </div>

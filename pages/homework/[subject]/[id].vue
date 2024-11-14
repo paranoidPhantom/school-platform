@@ -13,70 +13,9 @@ const homework = ref();
 const author = ref();
 const route = useRoute();
 
-interface commentFetched {
-    id: number;
-    created_at: string;
-    descendant_of: number;
-    content: string;
-    author_id: string;
-}
-
-interface comment {
-    id: number;
-    content: string;
-    author: {
-        full_name: string;
-        avatar_url: string;
-    };
-    time: string;
-}
-
-const localComments = ref<commentFetched[]>([]);
-
-const comments = computedAsync<comment[]>(async () => {
-    if (homework.value && homework.value.comments) {
-        const retval: comment[] = [];
-        const arr = localComments.value
-            .concat(homework.value.comments)
-            .sort((a, b) => {
-                return a.created_at < b.created_at
-                    ? 1
-                    : a.created_at > b.created_at
-                    ? -1
-                    : 0;
-            }) as commentFetched[];
-        for (let i = 0; i < arr.length; i++) {
-            const comment = arr[i];
-            const dateObj = new Date(comment.created_at);
-            const time = `${dateObj.toLocaleTimeString(
-                "ru"
-            )} - ${dateObj.toLocaleDateString("ru")}`;
-            const { data } = await useFetch("/api/userDataFromID", {
-                query: {
-                    UID: comment.author_id,
-                },
-            });
-            retval.push({
-                content: comment.content,
-                author:
-                    Object.keys(data.value).length > 0
-                        ? data.value
-                        : {
-                              full_name: useRandomNameFromKey(
-                                  comment.author_id
-                              ),
-                          },
-                time,
-                id: comment.id,
-            });
-        }
-        return retval;
-    }
-}, null);
-
 const { data: fetchedHW } = await supabase
     .from("homework")
-    .select("*, comments(*)")
+    .select("*")
     .eq("id", id)
     .eq("subject", subject)
     .single();
@@ -97,33 +36,6 @@ const normalizeDate = (date: string | undefined) => {
     const d = split[0];
     const m = split[1];
     return `${d.length < 2 ? "0" + d : d}.${m.length < 2 ? "0" + m : m}`;
-};
-
-const commentState = reactive({
-    input: "",
-});
-
-const validate = (state: any): FormError[] => {
-    const errors = [];
-    if (!state.input)
-        errors.push({ path: "input", message: "Обязательное поле" });
-    return errors;
-};
-
-const onSubmit = async (event: FormSubmitEvent<any>) => {
-    if (!user.value) return;
-    const content = event.data.input;
-    const created_at = new Date().toISOString();
-    const pushObject = {
-        content,
-        author_id: user.value.id,
-        descendant_of: homework.value.id,
-        created_at,
-    };
-    const { error } = await supabase.from("comments").insert(pushObject as any);
-    commentState.input = "";
-    if (error) commentState.input = content;
-    else localComments.value.push(pushObject as commentFetched);
 };
 
 const { data: ast } = (await useAsyncData("markdown", () =>
@@ -149,9 +61,9 @@ useHead({
             content: ast.value.data.description || ast.value.data.title,
         },
     ],
-	htmlAttrs: {
-		lang: 'ru'
-	},
+    htmlAttrs: {
+        lang: "ru",
+    },
 });
 </script>
 
@@ -207,66 +119,6 @@ useHead({
                 name="svg-spinners:ring-resize"
             />
         </main>
-        <hr
-            style="width: 80%; max-width: 35rem; opacity: 0.1; margin: 0 auto"
-        />
-        <section class="comments">
-            <UAlert
-                :icon="
-                    user
-                        ? `i-heroicons-pencil-square-20-solid`
-                        : `i-heroicons-user-20-solid`
-                "
-                :title="
-                    user
-                        ? 'Оставьте коммениарий'
-                        : `Войдите чтобы комментировать`
-                "
-            >
-                <template #description>
-                    <template v-if="user">
-                        <UForm
-                            @submit="onSubmit"
-                            :validate="validate"
-                            :state="commentState"
-                        >
-                            <UFormGroup name="input">
-                                <UTextarea
-                                    resize
-                                    class="my-4"
-                                    placeholder="Ваш комментарий"
-                                    v-model="commentState.input"
-                                />
-                            </UFormGroup>
-                            <UButton
-                                class="mt-4"
-                                type="submit"
-                                variant="soft"
-                                label="Оставить"
-                            />
-                        </UForm>
-                    </template>
-                    <UButton
-                        v-else
-                        class="mt-2"
-                        label="Войти"
-                        variant="soft"
-                        :to="`/auth?flow_dest=${route.fullPath}`"
-                    />
-                </template>
-            </UAlert>
-            <UAlert
-                class="w-10/12"
-                v-for="comment in comments"
-                :ui="{ avatar: { base: 'object-cover' } }"
-                :avatar="{
-                    src: comment.author.avatar_url,
-                    alt: comment.author.full_name,
-                }"
-                :title="comment.author.full_name"
-                :description="comment.content"
-            />
-        </section>
     </div>
 </template>
 

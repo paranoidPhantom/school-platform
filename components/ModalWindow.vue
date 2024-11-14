@@ -18,7 +18,7 @@ const homework = computed(() => {
                 : 0;
         });
     });
-	return retval;
+    return retval;
 });
 
 const modal = useState<{
@@ -111,10 +111,6 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
                 <UTabs :items="modal_tabs" class="w-full">
                     <template #default="{ item, index, selected }">
                         <div class="flex items-center gap-2 relative truncate">
-                            <Icon
-                                :name="item.icon"
-                                class="w-4 h-4 flex-shrink-0"
-                            />
                             <span class="truncate">{{ item.label }}</span>
                             <span
                                 v-if="selected"
@@ -211,21 +207,6 @@ const subjectData = (subject: keyof typeof schedule.subjects): subject => {
                                             }}
                                         </p>
                                     </div>
-
-                                    <NuxtLink
-                                        class="details"
-                                        :to="`/homework/${modal.lesson.subject}/${instance.id}`"
-                                    >
-                                        <UButton
-                                            variant="link"
-                                            trailing-icon="i-heroicons-arrow-right"
-                                            :label="
-                                                instance.comments.length > 0
-                                                    ? `Комментарии - ${instance.comments.length}`
-                                                    : `Оставить комментарий`
-                                            "
-                                        />
-                                    </NuxtLink>
                                 </div>
                             </div>
                         </UCard>
