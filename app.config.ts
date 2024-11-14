@@ -49,7 +49,7 @@ interface homework_instance {
     */;
     date?: string; // Формат: ДД/ММ/ГГГГ
     date_due: string; // Формат: ДД/ММ/ГГГГ (ВАЖНО: НЕ 09.05.2023, А 9.5.2023)
-    links?: string[]
+    links?: string[];
 }
 
 interface homework_array {
@@ -74,8 +74,8 @@ interface homework_array {
 
 export default defineAppConfig({
     ui: {
-        primary: "blue",
-        gray: "slate",
+        primary: "lime",
+        gray: "stone",
     },
     schedule: {
         days: ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"],
@@ -118,8 +118,8 @@ export default defineAppConfig({
         ],
         subjects: {
             terver: {
-                full: "Теория вероятностей",
-                short: "Тер. Вер.",
+                full: "Вероятность и статистика",
+                short: "Вер. и Стат.",
                 icon: "mdi:slot-machine-outline",
             },
             ru_l: {
@@ -128,8 +128,8 @@ export default defineAppConfig({
                 icon: "game-icons:matryoshka-dolls",
             },
             kl_chas: {
-                full: "Классный Час",
-                short: "Кл. Час",
+                full: "Разговор о важном",
+                short: "РОВ",
                 icon: "healthicons:war-outline",
             },
             chem: {
@@ -138,7 +138,7 @@ export default defineAppConfig({
                 icon: "game-icons:spiky-explosion",
             },
             alg: {
-                full: "Алгебра",
+                full: "Алгебра и начало мат. анализа",
                 short: "Алгебра",
                 icon: "tabler:math",
             },
@@ -159,11 +159,16 @@ export default defineAppConfig({
             },
             en_l: {
                 full: "Английский Язык",
-                short: "Англ. Яз.",
+                short: "English",
                 icon: "icon-park-outline:english",
             },
-            hist: {
+            hist_ru: {
                 full: "История России",
+                short: "История Рос.",
+                icon: "material-symbols:history-toggle-off-rounded",
+            },
+            hist: {
+                full: "История",
                 short: "История",
                 icon: "material-symbols:history-toggle-off-rounded",
             },
@@ -173,13 +178,13 @@ export default defineAppConfig({
                 icon: "streamline:computer-database-raid-storage-code-disk-programming-database-array-hard-disc",
             },
             obzh: {
-                full: "Основы Безопасности Жизнидеятельности",
-                short: "ОБЖ",
+                full: "Основы Безопасности и Зашиты Родины",
+                short: "ОБЗР",
                 icon: "game-icons:deadly-strike",
             },
             geom: {
                 full: "Геометрия",
-                short: "Геом.",
+                short: "Геометрия",
                 icon: "tabler:geometry",
             },
             obsh: {
@@ -271,126 +276,15 @@ export default defineAppConfig({
         },
         lessons: [
             [
-                // 1
-                {
-                    subject: "kl_chas",
-                    teacher: "ev",
-                    location: "ru",
-                },
-                {
-                    subject: "chem",
-                    teacher: "nn",
-                    location: "chem",
-                },
-                {
-                    subject: "alg",
-                    teacher: "rk",
-                    location: "math",
-                },
-                {
-                    subject: "phys",
-                    teacher: "p_oa",
-                    location: "phys",
-                },
-                {
-                    subject: "lit",
-                    teacher: "ev",
-                    location: "ru",
-                },
-                {
-                    subject: "phys_ed",
-                    teacher: "av",
-                    location: "sport",
-                },
-                {
-                    subject: "en_l",
-                    teacher: ["ia", "ei"],
-                    location: ["en_2", "en_1"],
-                },
+                { subject: "kl_chas", teacher: "ev", location: "ru" },
+                { subject: "bio", teacher: "ng", location: "bio" },
+                { subject: "alg", teacher: "rk", location: "math" },
+                { subject: "alg", teacher: "rk", location: "math" },
+                { subject: "phys", teacher: "p_oa", location: "phys" },
+                { subject: "hist", teacher: "pn", location: "hist" },
+                { subject: "hist_ru", teacher: "pn", location: "hist" },
             ],
             [
-                // 2
-                {
-                    subject: "lit",
-                    teacher: "ev",
-                    location: "ru",
-                },
-                {
-                    subject: "hist",
-                    teacher: "pn",
-                    location: "hist",
-                },
-                {
-                    subject: "inf",
-                    teacher: ["sv", "i_oa"],
-                    location: ["geo", "inf"],
-                },
-                {
-                    subject: "inf",
-                    teacher: ["sv", "i_oa"],
-                    location: ["geo", "inf"],
-                },
-                {
-                    subject: "geom",
-                    teacher: "rk",
-                    location: "math",
-                },
-                {
-                    subject: "en_l",
-                    teacher: ["ia", "ei"],
-                    location: ["en_2", "en_1"],
-                },
-                {
-                    subject: "hist",
-                    teacher: "pn",
-                    location: "hist",
-                },
-            ],
-            [
-                // 3
-                {
-                    subject: "obzh",
-                    teacher: "ni",
-                    location: "chem",
-                },
-                {
-                    subject: "alg",
-                    teacher: "rk",
-                    location: "math",
-                },
-                {
-                    subject: "obsh",
-                    teacher: "pn",
-                    location: "hist",
-                },
-                {
-                    subject: "obsh",
-                    teacher: "pn",
-                    location: "hist",
-                },
-                {
-                    subject: "lit",
-                    teacher: "ev",
-                    location: "ru",
-                },
-                {
-                    subject: "en_l",
-                    teacher: ["ia", "ei"],
-                    location: ["en_2", "en_1"],
-                },
-                {
-                    subject: "en_l",
-                    teacher: ["ia", "ei"],
-                    location: ["en_2", "en_1"],
-                },
-            ],
-            [
-                // 4
-                {
-                    subject: "terver",
-                    teacher: "rk",
-                    location: "math",
-                },
                 {
                     subject: "inf",
                     teacher: ["sv", "i_oa"],
@@ -401,64 +295,66 @@ export default defineAppConfig({
                     teacher: ["sv", "i_oa"],
                     location: ["ort", "inf"],
                 },
+                { subject: "phys_ed", teacher: "av", location: "sport" },
+                { subject: "lit", teacher: "ev", location: "ru" },
                 {
-                    subject: "geo",
-                    teacher: "eb",
-                    location: "geo",
+                    subject: "en_l",
+                    teacher: ["ia", "ei"],
+                    location: ["en_2", "en_1"],
                 },
+                { subject: "obsh", teacher: "pn", location: "hist" },
+                { subject: "terver", teacher: "rk", location: "math" },
+            ],
+            [
+                { subject: "phys", teacher: "p_oa", location: "phys" },
+                { subject: "hist", teacher: "pn", location: "hist" },
+                { subject: "alg", teacher: "rk", location: "math" },
+                { subject: "geom", teacher: "rk", location: "math" },
+                {
+                    subject: "en_l",
+                    teacher: ["ia", "ei"],
+                    location: ["en_2", "en_1"],
+                },
+                { subject: "ru_l", teacher: "ev", location: "ru" },
+                { subject: "ru_l", teacher: "ev", location: "ru" },
+            ],
+            [
+                {
+                    subject: "en_l",
+                    teacher: ["ia", "ei"],
+                    location: ["en_2", "en_1"],
+                },
+                { subject: "chem", teacher: "ng", location: "chem" },
+                { subject: "alg", teacher: "rk", location: "math" },
+                { subject: "lit", teacher: "ev", location: "ru" },
+                { subject: "lit", teacher: "ev", location: "ru" },
+                {
+                    subject: "inf",
+                    teacher: ["sv", "i_oa"],
+                    location: ["ort", "inf"],
+                },
+                {
+                    subject: "inf",
+                    teacher: ["sv", "i_oa"],
+                    location: ["ort", "inf"],
+                },
+            ],
+            [
+                { subject: "obsh", teacher: "pn", location: "hist" },
+                { subject: "geo", teacher: "eb", location: "geo" },
+                { subject: "geom", teacher: "rk", location: "math" },
                 {
                     subject: "en_l",
                     teacher: ["ia", "ei"],
                     location: ["en_2", "en_1"],
                 },
                 {
-                    subject: "phys",
-                    teacher: "p_oa",
-                    location: "phys",
+                    subject: "en_l",
+                    teacher: ["ia", "ei"],
+                    location: ["en_2", "en_1"],
                 },
-                {
-                    subject: "proj",
-                    teacher: "to",
-                    location: "inf",
-                },
-            ],
-            [
-                // 5
-                {
-                    subject: "ru_l",
-                    teacher: "ev",
-                    location: "ru",
-                },
-                {
-                    subject: "ru_l",
-                    teacher: "ev",
-                    location: "ru",
-                },
-                {
-                    subject: "alg",
-                    teacher: "rk",
-                    location: "math",
-                },
-                {
-                    subject: "geom",
-                    teacher: "rk",
-                    location: "math",
-                },
-                {
-                    subject: "phys_ed",
-                    teacher: "av",
-                    location: "sport",
-                },
-                {
-                    subject: "hist",
-                    teacher: "pn",
-                    location: "hist",
-                },
-                {
-                    subject: "bio",
-                    teacher: "ng",
-                    location: "bio",
-                },
+                { subject: "obzh", teacher: "ni", location: "chem" },
+                { subject: "phys_ed", teacher: "av", location: "sport" },
             ],
         ],
     },
