@@ -37,8 +37,8 @@ export default defineNuxtConfig({
     pwa: {
         includeAssets: ["favicon.ico", "apple-touch-icon.png"],
         manifest: {
-            name: "Домашнее задание | 10Б",
-            short_name: "ДЗ | 10Б",
+            name: "Домашнее задание | 1Б",
+            short_name: "ДЗ | 11Б",
             description:
                 "Платформа для нашего класса включающая рассписание уроков, удобную систему для записи и решения домашнего задания.",
             theme_color: "#0a0a0a",

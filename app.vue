@@ -43,7 +43,7 @@ const modal = useState<{
 watchEffect(() => {
     useHead({
         titleTemplate: (title) =>
-            title ? `${title} | 10Б` : `Домашнее задание | 10Б`,
+            title ? `${title} | 11Б` : `Домашнее задание | 11Б`,
         title: route.meta.title ? route.meta.title : undefined,
     });
 });
